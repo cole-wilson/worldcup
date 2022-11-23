@@ -8,18 +8,30 @@ Vue.component('flag', {
 Vue.component('match', {
 	props: ['match'],
 	template: `
-<div :id="match.id" class="group">
-	<span>{{(match.id==64) ? "Final" : ((match.id==63) ? "Third Place" : "Match " +match.id)}}</span>
+<div :id="match.id" class="group" @mouseover="$emit('starthover')" @mouseleave="$emit('endhover')">
+	<span><b>{{(match.id==64) ? "Final" : ((match.id==63) ? "Third Place" : "Match " +match.id)}}</b><br>{{this.$root.time(match.datetime)}}</span>
 	<br>
 	<flag size=2 :src="match.home_team.country"></flag>
-	<span class="home">{{match.home_team.name}}</span><span class="away">{{match.home_team.goals}}</span>
+	<span class="home">{{name(match.home_team)}}</span><span class="away biggish">{{match.home_team.goals||"_"}}</span>
 	<br><br>
 	vs.
 	<br><br>
 	<flag size=2 :src="match.away_team.country"></flag>
-	<span class="home">{{match.away_team.name}}</span><span class="away">{{match.away_team.goals}}</span>
+	<span class="home">{{name(match.away_team)}}</span><span class="away biggish">{{match.away_team.goals||"_"}}</span>
 </div>
-`
+`,
+	methods: {
+		name: function(team) {
+			if (team.name == "To Be Determined") {
+				if (team.country.startsWith("RU")) return "#" + team.country.slice(2) + " runner-up"
+				else if (team.country.startsWith("W")) return "#" + team.country.slice(1) + " winner"
+				else if (team.country.startsWith("1")) return team.country.slice(1) + " winner"
+				else return team.country.slice(1) + " runner-up"
+			} else {
+				return team.name
+			}
+		}
+	}
 })
 
 

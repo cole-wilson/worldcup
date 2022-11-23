@@ -32,7 +32,7 @@
 				</div>
 				<hr>
 			</div>
-			<div><h2>Groups</h2>
+			<div><details open><summary><h2>Groups</h2></summary>
 				<div id="groups">
 					<div v-for="group in groups" class="group">
 						<h3>Group {{group.letter.toUpperCase()}}</h3>
@@ -57,7 +57,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</details></div>
 			<div id="matchdetails" v-if="details">
 				<span class="home center">
 					<flag size=2 :code="details.home_team.country"></flag>
@@ -76,35 +76,35 @@
 			<h2>Main Bracket</h2>
 			<div id="bracket" v-if="matches.length>0">
 				<div class="col left">
-					<match :match="matches[49-1]"></match>
-					<match :match="matches[50-1]"></match>
-					<match :match="matches[53-1]"></match>
-					<match :match="matches[54-1]"></match>
+					<match :match="matches[49-1]" @starthover="showdetails(49)" @endhover="details=false"></match>
+					<match :match="matches[50-1]" @starthover="showdetails(50)" @endhover="details=false"></match>
+					<match :match="matches[53-1]" @starthover="showdetails(53)" @endhover="details=false"></match>
+					<match :match="matches[54-1]" @starthover="showdetails(54)" @endhover="details=false"></match>
 				</div>
 				<div class="col left">
-					<match :match="matches[57-1]"></match>
-					<match :match="matches[58-1]"></match>
+					<match :match="matches[57-1]" @starthover="showdetails(57)" @endhover="details=false"></match>
+					<match :match="matches[58-1]" @starthover="showdetails(58)" @endhover="details=false"></match>
 				</div>
 				<div class="col left">
-					<match :match="matches[61-1]"></match>
+					<match :match="matches[61-1]" @starthover="showdetails(61)" @endhover="details=false"></match>
 				</div>
 				<div class="col middle">
 					<div id="" class="group blank"></div>
-					<match :match="matches[64-1]"></match>
-					<match :match="matches[63-1]"></match>
+					<match :match="matches[64-1]" @starthover="showdetails(64)" @endhover="details=false"></match>
+					<match :match="matches[63-1]" @starthover="showdetails(63)" @endhover="details=false"></match>
 				</div>
 				<div class="col right">
-					<match :match="matches[62-1]"></match>
+					<match :match="matches[62-1]" @starthover="showdetails(62)" @endhover="details=false"></match>
 				</div>
 				<div class="col right">
-					<match :match="matches[59-1]"></match>
-					<match :match="matches[60-1]"></match>
+					<match :match="matches[59-1]" @starthover="showdetails(59)" @endhover="details=false"></match>
+					<match :match="matches[60-1]" @starthover="showdetails(60)" @endhover="details=false"></match>
 				</div>
 				<div class="col right">
-					<match :match="matches[51-1]"></match>
-					<match :match="matches[52-1]"></match>
-					<match :match="matches[55-1]"></match>
-					<match :match="matches[56-1]"></match>
+					<match :match="matches[51-1]" @starthover="showdetails(51)" @endhover="details=false"></match>
+					<match :match="matches[52-1]" @starthover="showdetails(52)" @endhover="details=false"></match>
+					<match :match="matches[55-1]" @starthover="showdetails(55)" @endhover="details=false"></match>
+					<match :match="matches[56-1]" @starthover="showdetails(56)" @endhover="details=false"></match>
 	</div>
 			</div>
 		</div>
