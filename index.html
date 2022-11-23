@@ -7,6 +7,7 @@
 		<link rel="stylesheet" href="./style.css">
 	</head>
 	<body>
+		<div id="loader">loading...</div>
 		<div id="app">
 			<div id="top">
 				<header>
@@ -14,32 +15,62 @@
 					<span>A simple website designed to help you track 2022's FIFA World Cup bracket. Data is from <a href="https://worldcupjson.net/">worldcupjson.net</a>, thanks!<br><br>
 						(c) <a href="https://cole.ws">cole wilson 2022</a></span>
 				</header>
-				<div id="current" v-if="current !== undefined">
-					<flag size=1 :code="current.home_team.country"></flag>
-					<span class="home">{{current.home_team.name}}</span>
-					<span class="score">{{current.home_team.goals}}-{{current.away_team.goals}}</span>
-					<span class="away">{{current.away_team.name}}</span>
-					<flag size=1 :code="current.away_team.country"></flag>
-					<br>
-					FT
+				<div @dblclick="fullscreenCurrent" id="current" v-if="current !== undefined">
+					<span class="home center">
+						<flag size=3 :code="current.home_team.country"></flag><br>
+						{{current.home_team.name}}
+					</span>
+					<span class="score">
+						<span class="big">{{current.home_team.goals}}-{{current.away_team.goals}}<br></span><br>
+						<b v-if="current.time">{{current.time.replaceAll("full-time", "FT").replaceAll("90'", "FT")}}</b><br>
+						<b v-if="!current.time">Final</b>
+					</span>
+					<span class="away center">
+						<flag size=3 :code="current.away_team.country"></flag><br>
+						{{current.away_team.name}}
+					</span>
 				</div>
+				<hr>
 			</div>
-			<hr>
 			<div><h2>Groups</h2>
 				<div id="groups">
 					<div v-for="group in groups" class="group">
 						<h3>Group {{group.letter.toUpperCase()}}</h3>
-						<flag v-for="team in group.teams" :code="team.country"></flag>
-						<div v-for="match in group.matches" :class="{future:match.status=='future_scheduled'}" class="gmatch">
-							{{String(match.id).padStart(2, "&nbsp;")}}<flag :code="match.home_team.country"></flag>
+						<span style="display:inline-block" v-for="team in group.teams">
+							<flag :code="team.country"></flag><br>
+							{{team.country}}<br>
+							{{team.group_points}}
+						</span><br>
+						<div
+							v-for="match in group.matches.map(id=>matches[id])"
+							@mouseover="showdetails(match.id)"
+							@mouseleave="details=false"
+							:class="{future:match.status=='future_scheduled',current:match.status=='in_progress'}"
+							class="gmatch">
+							<!-- {{String(match.id).padStart(2, "&nbsp;")}} -->
+							<flag :code="match.home_team.country"></flag>
 							<span :class="{bold:match.home_team.name==match.winner||match.winner=='Draw'}" class="home">{{match.home_team.name}}</span>
 							<span class="score" v-if="match.status == 'completed'">{{match.home_team.goals}}-{{match.away_team.goals}}</span>
-							<span class="score" v-if="match.status != 'completed'">vs.</span>
+							<span class="score" v-if="match.status != 'completed'">{{time(match.datetime)}}</span>
 							<span :class="{bold:match.away_team.name==match.winner||match.winner=='Draw'}" class="away">{{match.away_team.name}}</span>
 							<flag :code="match.away_team.country"></flag>
 						</div>
 					</div>
 				</div>
+			</div>
+			<div id="matchdetails" v-if="details">
+				<span class="home center">
+					<flag size=2 :code="details.home_team.country"></flag>
+					{{details.home_team.name}}
+				</span>
+				<span class="score" v-if="details.status == 'completed'">{{details.home_team.goals}}-{{details.away_team.goals}}</span>
+				<span class="score" v-if="details.status != 'completed'">vs.</span>
+				<span class="away center">
+					<flag size=2 :code="details.away_team.country"></flag>
+					{{details.away_team.name}}
+				</span>
+				<br>
+					<b v-for="event in details.home_team_events">{{event.type_of_event}} - {{event.player}}<br></b>
 			</div>
 			<hr>
 			<h2>Main Bracket</h2>
@@ -74,7 +105,7 @@
 					<match :match="matches[52-1]"></match>
 					<match :match="matches[55-1]"></match>
 					<match :match="matches[56-1]"></match>
-				</div>
+	</div>
 			</div>
 		</div>
 		<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>

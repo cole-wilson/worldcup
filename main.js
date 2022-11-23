@@ -3,13 +3,13 @@ async function getData(path) {return await (await fetch("https://worldcupjson.ne
 
 Vue.component('flag', {
 	props: {code:String, size:{type:String,default:"1"}},
-	template: `<img :class="'img'+size" :src="'https://api.fifa.com/api/v3/picture/flags-sq-'+size+'/'+code">`
+	template: `	<img :class="'img'+size" class="flag" :src="'https://api.fifa.com/api/v3/picture/flags-sq-'+size+'/'+code">`
 })
 Vue.component('match', {
 	props: ['match'],
 	template: `
 <div :id="match.id" class="group">
-	<span>{{(match.id==64)?"Final":match.id}}</span>
+	<span>{{(match.id==64) ? "Final" : ((match.id==63) ? "Third Place" : "Match " +match.id)}}</span>
 	<br>
 	<flag size=2 :src="match.home_team.country"></flag>
 	<span class="home">{{match.home_team.name}}</span><span class="away">{{match.home_team.goals}}</span>
@@ -29,18 +29,43 @@ var app = new Vue({
 	data: {
 		matches: [],
 		groups: [],
-		current: undefined
+		current: undefined,
+		details: false
+	},
+	mounted: function () {
+		document.getElementById("loader").remove()
 	},
 	methods: {
+		fullscreenCurrent: function () {
+			let elem = document.getElementById("current")
+			if (elem.requestFullscreen) {
+				elem.requestFullscreen();
+			} else if (elem.webkitRequestFullscreen) { /* Safari */
+				elem.webkitRequestFullscreen();
+			} else if (elem.msRequestFullscreen) { /* IE11 */
+				elem.msRequestFullscreen();
+			}
+		},
+		showdetails: function (id) {
+			detailedMatch(id)
+		},
 		time: function (str) {
 			let date = new Date(str);
-			let half = (date.getHours() >= 12) ? "PM" : "AM";
-			var hours = date.getHours() % 12;
-			let mins = date.getMinutes();
-			if (hours == 0) {
-				hours = "12"
+			let now = new Date();
+			if (date.getFullYear()==now.getFullYear() && date.getMonth()==now.getMonth() && date.getDate()==now.getDate()) {
+				let half = (date.getHours() >= 12) ? "pm" : "am";
+				var hours = date.getHours() % 12;
+				if (hours == 0) {
+					hours = "12"
+				}
+				if (date.getHours()>now.getHours()) {
+					return hours + half;
+				} else {
+					return "now!";
+				}
+			} else {
+				return (date.getMonth()+1)+"/"+date.getDate()
 			}
-			return hours + ":" + mins + " " + half;
 		}
 	}
 })
@@ -57,14 +82,32 @@ window.onload = async () => {
 
 		groupmatchids = app.matches.filter(match=>{
 			return groupteamids.includes(match.home_team_country) && match.stage_name == "First stage"
-		}).map(m=>m.id-1).map(m=>app.matches[m]).sort((a, b)=>{return a.id-b.id})
+		}).map(m=>m.id-1).sort((a, b)=>{return a.id-b.id})
 
-		app.groups.push({letter:groupname, teams:groupteams, matches:groupmatchids})
+		app.groups.push({letter:groupname, teams:groupteams.sort((a,b)=>b.group_points-a.group_points||b.goal_differential-a.goal_differential), matches:groupmatchids})
 	}
 
-	app.current = app.matches.filter(m=>m.status=="current")[0]
+	app.current = app.matches.filter(m=>m.status=="in_progress")[0]
 	if (app.current === undefined) {
+		console.log(app.current)
 		let temp = app.matches.filter(m=>m.status=="completed").sort((a,b)=>{return Date(a.datetime) - Date(b.datetime)})
 		app.current = temp[temp.length-1]
 	}
+	poll();
+}
+
+async function poll() {
+	let newdata = (await getData("/matches/current"))[0]
+	if (newdata !== undefined) {
+		app.matches[newdata.id-1] = newdata;
+		app.current = newdata;
+	}
+	setTimeout(poll, 60*1000)//1min
+}
+async function detailedMatch(id) {
+	// if (!app.matches[id-1].updated) {
+	// 	app.matches[id-1] = (await getData("/matches/"+id))
+	// 	app.matches[id-1].updated = true
+	// }
+	app.details = app.matches[id-1]
 }

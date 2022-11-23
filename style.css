@@ -3,40 +3,40 @@ body {
 	align-items: center;
 	font-family: monospace;
 	background: lightgrey;
+	width: 100vw;
 }
 
 .bold {font-weight: bold}
 
 .home, .away , .score {vertical-align:middle;display:inline-block}
 .home {width: 28%;text-align:left;}
-.score {width:10%;text-align:center;}
+.score {min-width:10%;text-align:center;}
 .away {width:28%;text-align:right;}
 
 #top {
 	margin: 10px;
-	height: 15vh;
 }
 header {
 	max-width: 30vw;
 	overflow: hidden;
-	max-height: 15vh;
 	display: inline-block;
 	text-align: left;
 }
 #current {
+	background: lightgrey;
 	width: 65vw;
 	text-align: center;
 	float: right;
 	display: inline-block;
 }
-#current span {font-size: 20px;}
-#current .score {font-size: 50px;}
+.big {font-size: 50px;font-weight:bold}
 
 h1,h2,h3,h4,h5,h6,p {margin:0;text-align: center;}
 h1 {text-align:left}
 
 img {border:1px solid black;vertical-align:middle;background: none}
 .img1 {width: 30px;}
+.label {transform:translateX(-20px);display:inline-block;background:#FFF9;width:27px;}
 
 #groups {
 	display: grid;
@@ -47,7 +47,9 @@ img {border:1px solid black;vertical-align:middle;background: none}
 }
 
 #bracket {
-	height: 80vh;
+	min-width: 900px;
+	overflow-x: auto;
+	/* height: 80vh; */
 	display: flex;
 }
 
@@ -74,17 +76,46 @@ img {border:1px solid black;vertical-align:middle;background: none}
 	border: 1px solid lightgrey;
 	max-height: 25%;
 	border-radius: 5px;
+	text-align:center;
 }
 .group.blank {
 	background: none;
 	border: none;
 }
-.gmatch.future {
-	opacity: 0.5;
-}
+.gmatch.future {opacity: 0.5;}
+.gmatch.current {background:#F00C}
+.center {text-align:center}
 
 .gmatch {
 	padding: 3px 0 3px;
+}
+
+#matchdetails {
+	position: fixed;
+	bottom: 10px;
+	right: 10px;
+	background: white;
+	/* max-width: 30vw; */
+	/* max-height:40vh; */
+	text-align:center;
+	overflow-y: auto;
+	border: 4px solid lightgrey;
+	border-radius: 5px;
+}
+
+
+#loader {
+	display:block;
+	position: fixed;
+	width: 100vw;
+	height:100vh;
+	top:0;
+	left:0;
+	background:lightgrey;
+	z-index: 999;
+	text-align: center;
+	padding-top: 45vh;
+	font-weight: bold;
 }
 
 /* Works on Firefox */
@@ -108,4 +139,10 @@ img {border:1px solid black;vertical-align:middle;background: none}
   background-color: lightgrey;
   border-radius: 20px;
   border: none;
+}
+
+
+@media (max-width:700px) {
+	header {max-width:100%}
+	#current {width: 100%;}
 }
