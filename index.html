@@ -29,12 +29,13 @@
 				<div id="groups">
 					<div v-for="group in groups" class="group">
 						<h3>Group {{group.letter.toUpperCase()}}</h3>
-						<div v-for="match in group.matches" class="gmatch">
+						<flag v-for="team in group.teams" :code="team.country"></flag>
+						<div v-for="match in group.matches" :class="{future:match.status=='future_scheduled'}" class="gmatch">
 							{{String(match.id).padStart(2, "&nbsp;")}}<flag :code="match.home_team.country"></flag>
-							<span :class="{bold:match.home_team.name==match.winner}" class="home">{{match.home_team.name}}</span>
+							<span :class="{bold:match.home_team.name==match.winner||match.winner=='Draw'}" class="home">{{match.home_team.name}}</span>
 							<span class="score" v-if="match.status == 'completed'">{{match.home_team.goals}}-{{match.away_team.goals}}</span>
 							<span class="score" v-if="match.status != 'completed'">vs.</span>
-							<span :class="{bold:match.away_team.name==match.winner}" class="away">{{match.away_team.name}}</span>
+							<span :class="{bold:match.away_team.name==match.winner||match.winner=='Draw'}" class="away">{{match.away_team.name}}</span>
 							<flag :code="match.away_team.country"></flag>
 						</div>
 					</div>

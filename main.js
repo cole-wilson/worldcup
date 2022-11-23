@@ -9,7 +9,7 @@ Vue.component('match', {
 	props: ['match'],
 	template: `
 <div :id="match.id" class="group">
-	<span>{{match.id}}</span>
+	<span>{{(match.id==64)?"Final":match.id}}</span>
 	<br>
 	<flag size=2 :src="match.home_team.country"></flag>
 	<span class="home">{{match.home_team.name}}</span><span class="away">{{match.home_team.goals}}</span>
@@ -51,11 +51,12 @@ window.onload = async () => {
 
 	for (var i=0;i<teamdata.length;i++) {
 		let groupname = teamdata[i].letter.toLowerCase();
-		let groupteams = teamdata[i].teams.map(t=>t.country);
+		let groupteams = teamdata[i].teams;
+		let groupteamids = teamdata[i].teams.map(t=>t.country);
 		let groupmatchids = [];
 
 		groupmatchids = app.matches.filter(match=>{
-			return groupteams.includes(match.home_team_country) && match.stage_name == "First stage"
+			return groupteamids.includes(match.home_team_country) && match.stage_name == "First stage"
 		}).map(m=>m.id-1).map(m=>app.matches[m]).sort((a, b)=>{return a.id-b.id})
 
 		app.groups.push({letter:groupname, teams:groupteams, matches:groupmatchids})

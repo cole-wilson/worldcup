@@ -79,6 +79,9 @@ img {border:1px solid black;vertical-align:middle;background: none}
 	background: none;
 	border: none;
 }
+.gmatch.future {
+	opacity: 0.5;
+}
 
 .gmatch {
 	padding: 3px 0 3px;
