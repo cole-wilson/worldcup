@@ -1,0 +1,108 @@
+body {
+	margin: 0;
+	align-items: center;
+	font-family: monospace;
+	background: lightgrey;
+}
+
+.bold {font-weight: bold}
+
+.home, .away , .score {vertical-align:middle;display:inline-block}
+.home {width: 28%;text-align:left;}
+.score {width:10%;text-align:center;}
+.away {width:28%;text-align:right;}
+
+#top {
+	margin: 10px;
+	height: 15vh;
+}
+header {
+	max-width: 30vw;
+	overflow: hidden;
+	max-height: 15vh;
+	display: inline-block;
+	text-align: left;
+}
+#current {
+	width: 65vw;
+	text-align: center;
+	float: right;
+	display: inline-block;
+}
+#current span {font-size: 20px;}
+#current .score {font-size: 50px;}
+
+h1,h2,h3,h4,h5,h6,p {margin:0;text-align: center;}
+h1 {text-align:left}
+
+img {border:1px solid black;vertical-align:middle;background: none}
+.img1 {width: 30px;}
+
+#groups {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+#groups .group {
+	max-height: none;
+}
+
+#bracket {
+	height: 80vh;
+	display: flex;
+}
+
+.col {
+	/* item stuff */
+	flex: 1 1 0px;
+	text-align: center;
+
+	/* parent stuff */
+	display: flex;
+	flex-direction: column;
+	height: 85vh;
+	justify-content: space-around;
+	/* border:1px solid green; */
+}
+
+.group {
+	background: white;
+	display: inline-block;
+	vertical-align: middle;
+	margin: 2px;
+	min-width: 50px;
+	flex: 1 1 0px;
+	border: 1px solid lightgrey;
+	max-height: 25%;
+	border-radius: 5px;
+}
+.group.blank {
+	background: none;
+	border: none;
+}
+
+.gmatch {
+	padding: 3px 0 3px;
+}
+
+/* Works on Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-height: thin;
+  scrollbar-color: lightgrey transparent;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: lightgrey;
+  border-radius: 20px;
+  border: none;
+}

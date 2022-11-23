@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		<title>2022 FIFA World Cup Bracket</title>
+		<link rel="stylesheet" href="./style.css">
+	</head>
+	<body>
+		<div id="app">
+			<div id="top">
+				<header>
+					<h1>2022 FIFA World Cup</h1>
+					<span>A simple website designed to help you track 2022's FIFA World Cup bracket. Data is from <a href="https://worldcupjson.net/">worldcupjson.net</a>, thanks!<br><br>
+						(c) <a href="https://cole.ws">cole wilson 2022</a></span>
+				</header>
+				<div id="current" v-if="current !== undefined">
+					<flag size=1 :code="current.home_team.country"></flag>
+					<span class="home">{{current.home_team.name}}</span>
+					<span class="score">{{current.home_team.goals}}-{{current.away_team.goals}}</span>
+					<span class="away">{{current.away_team.name}}</span>
+					<flag size=1 :code="current.away_team.country"></flag>
+					<br>
+					FT
+				</div>
+			</div>
+			<hr>
+			<div><h2>Groups</h2>
+				<div id="groups">
+					<div v-for="group in groups" class="group">
+						<h3>Group {{group.letter.toUpperCase()}}</h3>
+						<div v-for="match in group.matches" class="gmatch">
+							{{String(match.id).padStart(2, "&nbsp;")}}<flag :code="match.home_team.country"></flag>
+							<span :class="{bold:match.home_team.name==match.winner}" class="home">{{match.home_team.name}}</span>
+							<span class="score" v-if="match.status == 'completed'">{{match.home_team.goals}}-{{match.away_team.goals}}</span>
+							<span class="score" v-if="match.status != 'completed'">vs.</span>
+							<span :class="{bold:match.away_team.name==match.winner}" class="away">{{match.away_team.name}}</span>
+							<flag :code="match.away_team.country"></flag>
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr>
+			<h2>Main Bracket</h2>
+			<div id="bracket" v-if="matches.length>0">
+				<div class="col left">
+					<match :match="matches[49-1]"></match>
+					<match :match="matches[50-1]"></match>
+					<match :match="matches[53-1]"></match>
+					<match :match="matches[54-1]"></match>
+				</div>
+				<div class="col left">
+					<match :match="matches[57-1]"></match>
+					<match :match="matches[58-1]"></match>
+				</div>
+				<div class="col left">
+					<match :match="matches[61-1]"></match>
+				</div>
+				<div class="col middle">
+					<div id="" class="group blank"></div>
+					<match :match="matches[64-1]"></match>
+					<match :match="matches[63-1]"></match>
+				</div>
+				<div class="col right">
+					<match :match="matches[62-1]"></match>
+				</div>
+				<div class="col right">
+					<match :match="matches[59-1]"></match>
+					<match :match="matches[60-1]"></match>
+				</div>
+				<div class="col right">
+					<match :match="matches[51-1]"></match>
+					<match :match="matches[52-1]"></match>
+					<match :match="matches[55-1]"></match>
+					<match :match="matches[56-1]"></match>
+				</div>
+			</div>
+		</div>
+		<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+		<script src="./main.js"></script>
+	</body>
+</html>
