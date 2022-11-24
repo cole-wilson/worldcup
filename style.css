@@ -45,7 +45,7 @@ img {border:1px solid black;vertical-align:middle;background: none}
 	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
 
-summary {text-align:center}
+summary {text-align:center;cursor:pointer;user-select:none}
 summary h2 {display: inline;}
 
 #groups .group {
@@ -99,7 +99,8 @@ summary h2 {display: inline;}
 .gmatch {
 	padding: 3px 0 3px;
 }
-.gmatch:hover {
+.gmatch:hover, .gmatch:focus, .group:focus, #bracket .group:hover:not(.blank) {
+	cursor: pointer;
 	background: #AAAAAA;
 	opacity: 100%;
 }

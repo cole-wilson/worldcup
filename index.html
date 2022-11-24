@@ -11,11 +11,12 @@
 		<div id="app">
 			<div id="top">
 				<header>
-					<h1>2022 FIFA World Cup</h1>
-					<span>A simple website designed to help you track 2022's FIFA World Cup bracket. Data is from <a href="https://worldcupjson.net/">worldcupjson.net</a>, thanks!<br><br>
+					<h1>2022 FIFA World Cup Bracket</h1>
+					<span>A simple website designed to help you track 2022's FIFA World Cup bracket. Data is from <a href="https://worldcupjson.net/">worldcupjson.net</a> and the flags are from FIFA, thanks! Click on a match to show a play-by-play view, and view live score updates! The current (or most recent) game appears at the top of your screen. Once the group games are done, scroll down to see an entire tournament bracket also updated in real time. If you have any suggestions, be sure to post them <a href="">here</a>, and I'll add them ASAP!<br><br>
 						(c) <a href="https://cole.ws">cole wilson 2022</a></span>
 				</header>
 				<div @dblclick="fullscreenCurrent" id="current" v-if="current !== undefined">
+					<br><br>
 					<span class="home center">
 						<flag size=3 :code="current.home_team.country"></flag><br>
 						{{current.home_team.name}}
@@ -23,7 +24,8 @@
 					<span class="score">
 						<span class="big">{{current.home_team.goals}}-{{current.away_team.goals}}<br></span><br>
 						<b v-if="current.time">{{current.time.replaceAll("full-time", "FT").replaceAll("90'", "FT")}}</b><br>
-						<b v-if="!current.time">Final</b>
+						<b v-if="!current.time">FINAL</b><br>
+						<i class="loss">updates every minute</i>
 					</span>
 					<span class="away center">
 						<flag size=3 :code="current.away_team.country"></flag><br>
@@ -44,10 +46,12 @@
 						<div
 							v-for="match in group.matches.map(id=>matches[id])"
 							@mouseover="showdetails(match.id)"
-							@click="showdetails(match.id);clicking=true"
+							@click="showdetails(match.id, true)"
+							@focus="showdetails(match.id, true)"
 							@mouseleave="closedetails()"
 							:class="{future:match.status=='future_scheduled',current:match.status=='in_progress'}"
-							class="gmatch">
+							class="gmatch"
+							tabindex="0">
 							<!-- {{String(match.id).padStart(2, "&nbsp;")}} -->
 							<flag :code="match.home_team.country"></flag>
 							<span :class="{bold:match.home_team.name==match.winner||match.winner=='Draw'}" class="home">{{match.home_team.name}}</span>
@@ -92,35 +96,35 @@
 			<h2>Main Bracket</h2>
 			<div id="bracket" v-if="matches.length>0">
 				<div class="col left">
-					<match :match="matches[49-1]" @starthover="showdetails(49)" @endhover="closedetails()"></match>
-					<match :match="matches[50-1]" @starthover="showdetails(50)" @endhover="closedetails()"></match>
-					<match :match="matches[53-1]" @starthover="showdetails(53)" @endhover="closedetails()"></match>
-					<match :match="matches[54-1]" @starthover="showdetails(54)" @endhover="closedetails()"></match>
+					<match :match="matches[49-1]"></match>
+					<match :match="matches[50-1]"></match>
+					<match :match="matches[53-1]"></match>
+					<match :match="matches[54-1]"></match>
 				</div>
 				<div class="col left">
-					<match :match="matches[58-1]" @starthover="showdetails(58)" @endhover="closedetails()"></match>
-					<match :match="matches[57-1]" @starthover="showdetails(57)" @endhover="closedetails()"></match>
+					<match :match="matches[58-1]"></match>
+					<match :match="matches[57-1]"></match>
 				</div>
 				<div class="col left">
-					<match :match="matches[61-1]" @starthover="showdetails(61)" @endhover="closedetails()"></match>
+					<match :match="matches[61-1]"></match>
 				</div>
 				<div class="col middle">
 					<div id="" class="group blank"></div>
-					<match :match="matches[64-1]" @starthover="showdetails(64)" @endhover="closedetails()"></match>
-					<match :match="matches[63-1]" @starthover="showdetails(63)" @endhover="closedetails()"></match>
+					<match :match="matches[64-1]"></match>
+					<match :match="matches[63-1]"></match>
 				</div>
 				<div class="col right">
-					<match :match="matches[62-1]" @starthover="showdetails(62)" @endhover="closedetails()"></match>
+					<match :match="matches[62-1]"></match>
 				</div>
 				<div class="col right">
-					<match :match="matches[60-1]" @starthover="showdetails(60)" @endhover="closedetails()"></match>
-					<match :match="matches[59-1]" @starthover="showdetails(59)" @endhover="closedetails()"></match>
+					<match :match="matches[60-1]"></match>
+					<match :match="matches[59-1]"></match>
 				</div>
 				<div class="col right">
-					<match :match="matches[51-1]" @starthover="showdetails(51)" @endhover="closedetails()"></match>
-					<match :match="matches[52-1]" @starthover="showdetails(52)" @endhover="closedetails()"></match>
-					<match :match="matches[55-1]" @starthover="showdetails(55)" @endhover="closedetails()"></match>
-					<match :match="matches[56-1]" @starthover="showdetails(56)" @endhover="closedetails()"></match>
+					<match :match="matches[51-1]"></match>
+					<match :match="matches[52-1]"></match>
+					<match :match="matches[55-1]"></match>
+					<match :match="matches[56-1]"></match>
 				</div>
 			</div>
 		</div>

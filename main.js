@@ -3,21 +3,28 @@ async function getData(path) {return await (await fetch("https://worldcupjson.ne
 
 Vue.component('flag', {
 	props: {code:String, size:{type:String,default:"1"}},
-	template: `	<img :class="'img'+size" class="flag" :src="'https://api.fifa.com/api/v3/picture/flags-sq-'+size+'/'+code">`
+	template: `	<img v-if="!(/\d/g).test(code)" :class="'img'+size" class="flag" :src="'https://api.fifa.com/api/v3/picture/flags-sq-'+size+'/'+code">`
 })
 Vue.component('match', {
 	props: ['match'],
 	template: `
-<div :id="match.id" class="group" @mouseover="$emit('starthover')" @mouseleave="$emit('endhover')">
+<div :id="match.id"
+	class="group"
+	@mouseover="$root.showdetails(match.id)"
+	@click="$root.showdetails(match.id, true)"
+	@focus="$root.showdetails(match.id, true)"
+	tabindex=0
+	:class="{future:match.status=='future_scheduled',current:match.status=='in_progress'}"
+	@mouseleave="$root.closedetails()">
 	<span><b>{{(match.id==64) ? "Final" : ((match.id==63) ? "Third Place" : "Match " +match.id)}}</b><br>{{this.$root.time(match.datetime)}}</span>
 	<br>
 	<flag size=2 :src="match.home_team.country"></flag>
-	<span class="home">{{name(match.home_team)}}</span><span class="away biggish">{{match.home_team.goals||"_"}}</span>
+	<span class="home">{{name(match.home_team)}}</span><span class="away biggish">{{match.home_team.goals||" "}}</span>
 	<br><br>
 	vs.
 	<br><br>
 	<flag size=2 :src="match.away_team.country"></flag>
-	<span class="home">{{name(match.away_team)}}</span><span class="away biggish">{{match.away_team.goals||"_"}}</span>
+	<span class="home">{{name(match.away_team)}}</span><span class="away biggish">{{match.away_team.goals||" "}}</span>
 </div>
 `,
 	methods: {
@@ -74,8 +81,11 @@ var app = new Vue({
 			e.sort((a,b)=>a.id-b.id)
 			return e
 		},
-		showdetails: function (id) {
-			detailedMatch(id)
+		showdetails: function (id, click) {
+			if (!this.clicking || click) {
+				detailedMatch(id)
+			}
+			if (click && !this.clicking) {this.clicking=true}
 		},
 		closedetails: function () {
 			if (!this.clicking) {
@@ -103,6 +113,9 @@ var app = new Vue({
 	}
 })
 
+window.onkeydown = (e) => {if (e.key === "Escape") {app.clicking = false;app.details = false;document.body.focus()}}
+document.body.onclick = (e) => {if (e.target.closest(".gmatch, #bracket .group")==null){app.details=false}}
+
 window.onload = async () => {
 	app.matches = (await getData("/matches"))
 	let teamdata = (await getData("/teams")).groups
@@ -128,6 +141,8 @@ window.onload = async () => {
 	}
 	poll();
 }
+window.onfocus = () => {document.title = "2022 FIFA World Cup Bracket"}
+window.onblur = () => {document.title = app.current.home_team.country + " " + app.current.home_team.goals + "-" + app.current.away_team.goals + " " + app.current.away_team.country;}
 
 async function poll() {
 	let newdata = (await getData("/matches/current"))[0]
