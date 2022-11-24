@@ -1,5 +1,6 @@
 body {
 	margin: 0;
+	padding: 0;
 	align-items: center;
 	font-family: monospace;
 	background: lightgrey;
@@ -43,6 +44,10 @@ img {border:1px solid black;vertical-align:middle;background: none}
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
+
+summary {text-align:center}
+summary h2 {display: inline;}
+
 #groups .group {
 	max-height: none;
 }
@@ -84,12 +89,19 @@ img {border:1px solid black;vertical-align:middle;background: none}
 	background: none;
 	border: none;
 }
-.gmatch.future {opacity: 0.5;}
+.gmatch.future, .loss {opacity: 0.5;}
 .gmatch.current {background:#F00C}
 .center {text-align:center}
+.left {text-align:left;}
+.right {text-align:right;}
+.half {display:inline-block;width:45%}
 
 .gmatch {
 	padding: 3px 0 3px;
+}
+.gmatch:hover {
+	background: #AAAAAA;
+	opacity: 100%;
 }
 
 #matchdetails {
@@ -98,10 +110,13 @@ img {border:1px solid black;vertical-align:middle;background: none}
 	right: 10px;
 	background: white;
 	max-width: 60vw;
+	min-width: 30vw;
+	padding: 10px;
 	max-height:40vh;
 	text-align:center;
 	overflow-y: auto;
-	border: 4px solid lightgrey;
+	border: 2px solid grey;
+	/* border-style: inset; */
 	border-radius: 5px;
 }
 

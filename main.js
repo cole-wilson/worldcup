@@ -42,7 +42,8 @@ var app = new Vue({
 		matches: [],
 		groups: [],
 		current: undefined,
-		details: false
+		details: false,
+		clicking: false
 	},
 	mounted: function () {
 		document.getElementById("loader").remove()
@@ -58,8 +59,28 @@ var app = new Vue({
 				elem.msRequestFullscreen();
 			}
 		},
+		events: function(match) {
+			var e = [];
+			for (eindex in match.home_team_events) {
+				let edata = match.home_team_events[eindex];
+				edata.class = "left";
+				e.push(edata)
+			}
+			for (eindex in match.away_team_events) {
+				let edata = match.away_team_events[eindex];
+				edata.class = "right";
+				e.push(edata)
+			}
+			e.sort((a,b)=>a.id-b.id)
+			return e
+		},
 		showdetails: function (id) {
 			detailedMatch(id)
+		},
+		closedetails: function () {
+			if (!this.clicking) {
+				this.details = false;
+			}
 		},
 		time: function (str) {
 			let date = new Date(str);
@@ -116,10 +137,10 @@ async function poll() {
 	}
 	setTimeout(poll, 60*1000)//1min
 }
+var updated = {};
 async function detailedMatch(id) {
-	// if (!app.matches[id-1].updated) {
-	// 	app.matches[id-1] = (await getData("/matches/"+id))
-	// 	app.matches[id-1].updated = true
-	// }
-	app.details = app.matches[id-1]
+	if (!(id in updated)) {
+		updated[id] = (await getData("/matches/"+id))
+	}
+	app.details = updated[id]
 }
