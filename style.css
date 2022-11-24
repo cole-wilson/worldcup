@@ -29,7 +29,18 @@ header {
 	text-align: center;
 	float: right;
 	display: inline-block;
+	user-select: none;
 }
+#current:fullscreen {
+	padding-top: 40vh;
+	transform: scale(2);
+}
+#closemessage {display:none}
+#current:fullscreen .big {font-size: 140px;}
+#current:fullscreen .home, #current:fullscreen .away {transform: scale(2)}
+#current:fullscreen #closemessage {display:block;color:darkred;position:fixed;left:0;top:0;}
+#current:fullscreen #openmessage {display:none}
+
 .big {font-size: 50px;font-weight:bold}
 .biggish {font-size: 24px;}
 
@@ -55,8 +66,8 @@ summary h2 {display: inline;}
 #bracket {
 	width: 100vw;
 	padding: 0px;
-	overflow-x: auto;
-	min-height: 100vh;
+	overflow: auto;
+	height: 100vh;
 	display: flex;
 }
 
@@ -68,7 +79,7 @@ summary h2 {display: inline;}
 	/* parent stuff */
 	display: flex;
 	flex-direction: column;
-	height: 85vh;
+	/* height: 85vh; */
 	justify-content: space-around;
 	/* border:1px solid green; */
 }
@@ -79,22 +90,35 @@ summary h2 {display: inline;}
 	vertical-align: middle;
 	margin: 2px;
 	min-width: 180px;
-	flex: 1 1 0px;
+	/* flex: 0 0 100px; */
 	border: 1px solid lightgrey;
-	max-height: 25%;
+	/* max-height: 25%; */
 	border-radius: 5px;
 	text-align:center;
 }
 .group.blank {
+	min-height:25%;
 	background: none;
 	border: none;
 }
-.gmatch.future, .loss {opacity: 0.5;}
-.gmatch.current {background:#F00C}
+.future, .loss {opacity: 0.5;}
+.current {background:skyblue}
 .center {text-align:center}
 .left {text-align:left;}
 .right {text-align:right;}
-.half {display:inline-block;width:45%}
+.sticky{position:sticky;top:0px;background: white;border-bottom:1px solid grey}
+.half {
+	display:inline-block;
+	width:45%;
+	vertical-align:top;
+}
+#lineup {width: 100%;border-collapse:collapse;}
+#lineup td {
+	border: 1px solid black;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+}
 
 .gmatch {
 	padding: 3px 0 3px;
@@ -106,6 +130,7 @@ summary h2 {display: inline;}
 }
 
 #matchdetails {
+	z-index:9;
 	position: fixed;
 	bottom: 10px;
 	right: 10px;
@@ -119,6 +144,10 @@ summary h2 {display: inline;}
 	border: 2px solid grey;
 	/* border-style: inset; */
 	border-radius: 5px;
+}
+#matchdetails.moved {
+	right: revert;
+	left: 10px;
 }
 
 
@@ -166,8 +195,7 @@ summary h2 {display: inline;}
 	.img3 {width: 20vw;}
 	.big {font-size: 30px}
 	#matchdetails {
-		max-width: 100vw;
-		width: calc( 100vw - 20px );
+		max-width: calc( 100vw - 50px);
 		max-height: 50vh;
 	}
 }

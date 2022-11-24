@@ -3,7 +3,7 @@ async function getData(path) {return await (await fetch("https://worldcupjson.ne
 
 Vue.component('flag', {
 	props: {code:String, size:{type:String,default:"1"}},
-	template: `	<img v-if="!(/\d/g).test(code)" :class="'img'+size" class="flag" :src="'https://api.fifa.com/api/v3/picture/flags-sq-'+size+'/'+code">`
+	template: `	<img v-if="!(/\d/g).test(code)" :class="'img'+size" class="flag" :src="'https://api.fifa.com/api/v3/picture/flags-sq-'+size+'/'+code" :alt="code">`
 })
 Vue.component('match', {
 	props: ['match'],
@@ -14,7 +14,7 @@ Vue.component('match', {
 	@click="$root.showdetails(match.id, true)"
 	@focus="$root.showdetails(match.id, true)"
 	tabindex=0
-	:class="{future:match.status=='future_scheduled',current:match.status=='in_progress'}"
+	:class="{future:match.status.startsWith('future'),current:match.id==$root.current.id}"
 	@mouseleave="$root.closedetails()">
 	<span><b>{{(match.id==64) ? "Final" : ((match.id==63) ? "Third Place" : "Match " +match.id)}}</b><br>{{this.$root.time(match.datetime)}}</span>
 	<br>
@@ -50,7 +50,8 @@ var app = new Vue({
 		groups: [],
 		current: undefined,
 		details: false,
-		clicking: false
+		clicking: false,
+		ismoved: false
 	},
 	mounted: function () {
 		document.getElementById("loader").remove()
@@ -83,6 +84,7 @@ var app = new Vue({
 		},
 		showdetails: function (id, click) {
 			if (!this.clicking || click) {
+				this.ismoved = (document.getElementById(id).getBoundingClientRect().left / window.innerWidth > 0.5)
 				detailedMatch(id)
 			}
 			if (click && !this.clicking) {this.clicking=true}
