@@ -125,7 +125,7 @@
 					</span>
 					<span class="half right">
 						<span v-for="player in details.away_team_lineup.starting_eleven">
-							<i>{{player.position[0].toLowerCase()}}</i> {{player.name}} <b>{{String(player.shirt_number).padStart(2,)}}</b><br>
+							<i>{{player.position[0].toLowerCase()}}</i> {{player.name}} <b>{{String(player.shirt_number).padStart(2,0)}}</b><br>
 						</span>
 					</span>
 				</div>
