@@ -69,7 +69,7 @@
 				</div>
 			</details></div>
 			<div id="matchdetails" v-if="details" :class="{moved:ismoved}">
-
+				<a href="#" target="_top" @click="details=false" title="close details">&times;</a>
 				<div class="">
 					<b>Match #{{details.id}}</b><br><br>
 					<span class="home center">

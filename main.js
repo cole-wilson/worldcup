@@ -142,7 +142,17 @@ window.onload = async () => {
 	poll();
 }
 window.onfocus = () => {document.title = "2022 FIFA World Cup Bracket"}
-window.onblur = () => {document.title = app.current.home_team.country + " " + app.current.home_team.goals + "-" + app.current.away_team.goals + " " + app.current.away_team.country;}
+window.onblur = () => {
+	document.title = app.current.home_team.country
+		+ " "
+		+ app.current.home_team.goals
+		+ "-"
+		+ app.current.away_team.goals
+		+ " "
+		+ app.current.away_team.country
+		+ " "
+		+ (app.current.time||'FINAL')
+}
 
 async function poll() {
 	let newdata = (await getData("/matches/current"))[0]
