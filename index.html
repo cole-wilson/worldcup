@@ -41,7 +41,7 @@
 				<div id="groups">
 					<div v-for="group in groups" class="group">
 						<h3>Group {{group.letter.toUpperCase()}}</h3>
-						<span style="display:inline-block" v-for="team in rankings(group)">
+						<span style="display:inline-block" v-for="team in group.teams">
 							<flag :code="team.country"></flag><br>
 							{{team.country}}<br>
 							{{team.group_points}}
@@ -93,11 +93,13 @@
 				<div v-else-if v-for="event in events(details)">
 					<span class="half right"><span v-if="event.class=='left'">
 							{{event.time}} <b>{{event.type_of_event}}</b><br>
-							{{event.player}}<br><br>
+							{{event.player}}<del v-if="event.off"><br>{{event.off}}</del>
+							<br><br>
 					</span></span>
 					<span class="half left"><span v-if="event.class=='right'">
 							<b>{{event.type_of_event}}</b> {{event.time}}<br>
-							{{event.player}}<br><br>
+							{{event.player}}<del v-if="event.off"><br>{{event.off}}</del>
+							<br><br>
 					</span></span>
 				</div>
 				<hr>

@@ -60,9 +60,6 @@ var app = new Vue({
 		document.getElementById("loader").remove()
 	},
 	methods: {
-		rankings: function(group) {
-			return group.teams.sort((b,a)=>a.group_points-b.group_points)
-		},
 		fullscreenCurrent: function () {
 			let elem = document.getElementById("current")
 			if (elem.requestFullscreen) {
@@ -78,11 +75,13 @@ var app = new Vue({
 			for (eindex in match.home_team_events) {
 				let edata = match.home_team_events[eindex];
 				edata.class = "left";
+				if (edata.extra_info) edata.off = JSON.parse(edata.extra_info).player_off
 				e.push(edata)
 			}
 			for (eindex in match.away_team_events) {
 				let edata = match.away_team_events[eindex];
 				edata.class = "right";
+				if (edata.extra_info) edata.off = JSON.parse(edata.extra_info).player_off
 				e.push(edata)
 			}
 			e.sort((a,b)=>a.id-b.id)
