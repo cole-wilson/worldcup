@@ -199,3 +199,15 @@ summary h2 {display: inline;}
 		max-height: 50vh;
 	}
 }
+
+
+
+.coffee {
+	border: 1px solid darkgrey;
+	margin-top: 5px;
+	padding: 2px;
+	display: inline-block;
+	text-decoration: none;
+	border-radius: 2px;
+	color: black;
+}
