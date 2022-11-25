@@ -101,7 +101,7 @@ summary h2 {display: inline;}
 	background: none;
 	border: none;
 }
-.future, .loss {opacity: 0.5;}
+.future, .loss {opacity: 30%;}
 .current {background:skyblue}
 .center {text-align:center}
 .left {text-align:left;}

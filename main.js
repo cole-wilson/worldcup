@@ -1,5 +1,6 @@
 const locale = navigator.languages && navigator.languages.length ? navigator.languages[0] : navigator.language;
 // const locale = "en-GB"
+var mouseX;
 
 async function getData(path) {return await (await fetch("https://worldcupjson.net"+path)).json()}
 
@@ -59,6 +60,9 @@ var app = new Vue({
 		document.getElementById("loader").remove()
 	},
 	methods: {
+		rankings: function(group) {
+			return group.teams.sort((b,a)=>a.group_points-b.group_points)
+		},
 		fullscreenCurrent: function () {
 			let elem = document.getElementById("current")
 			if (elem.requestFullscreen) {
@@ -86,7 +90,7 @@ var app = new Vue({
 		},
 		showdetails: function (id, click) {
 			if (!this.clicking || click) {
-				this.ismoved = (document.getElementById(id).getBoundingClientRect().left / window.innerWidth > 0.5)
+				this.ismoved = (mouseX / window.innerWidth > 0.5)
 				detailedMatch(id)
 			}
 			if (click && !this.clicking) {this.clicking=true}
@@ -115,6 +119,7 @@ var app = new Vue({
 
 window.onkeydown = (e) => {if (e.key === "Escape") {app.clicking = false;app.details = false;document.body.focus()}}
 document.body.onclick = (e) => {if (e.target.closest(".gmatch, #bracket .group")==null){app.details=false}}
+document.body.onmousemove = (e) => {mouseX = e.clientX}
 
 window.onload = async () => {
 	app.matches = (await getData("/matches"))
