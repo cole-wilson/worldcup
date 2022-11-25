@@ -18,7 +18,7 @@ Vue.component('match', {
 	tabindex=0
 	:class="{future:match.status.startsWith('future'),current:match.id==$root.current.id}"
 	@mouseleave="$root.closedetails()">
-	<span><b>{{(match.id==64) ? "Final" : ((match.id==63) ? "Third Place" : "Match " +match.id)}}</b><br>{{this.$root.time(match.datetime)}}</span>
+	<span><b>{{(match.id==64) ? "Final" : ((match.id==63) ? "Third Place" : "Match " +match.id)}}</b><br>{{this.$root.time(match.datetime, false, true)}}</span>
 	<br>
 	<flag size=2 :src="match.home_team.country"></flag>
 	<span class="home">{{name(match.home_team)}}</span><span class="away biggish">{{match.home_team.goals||" "}}</span>
@@ -96,7 +96,7 @@ var app = new Vue({
 				this.details = false;
 			}
 		},
-		time: function (str, l) {
+		time: function (str, l,ish) {
 			let date = new Date(str);
 			if (l) {
 				return Intl.DateTimeFormat(locale, {dateStyle:"long", timeStyle:"short"}).format(date) + " your time";
@@ -107,7 +107,7 @@ var app = new Vue({
 			if (diff > 0 && diff < 1) {
 				return Intl.DateTimeFormat(locale, {hour:"numeric"}).format(date).replaceAll(" ","").toLowerCase();
 			} else {
-				return Intl.DateTimeFormat(locale, {month:'narrow',day:'2-digit'}).format(date).replaceAll(" ","");
+				return Intl.DateTimeFormat(locale, {month:ish?'long':'narrow',day:'2-digit'}).format(date).replaceAll(" ",ish?" ":"");
 			}
 		}
 	}
