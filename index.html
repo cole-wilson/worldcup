@@ -60,7 +60,8 @@
 							<flag :code="match.home_team.country"></flag>
 							<span :class="{bold:match.home_team.name==match.winner||match.winner=='Draw'}" class="home">{{match.home_team.name}}</span>
 							<span class="score" v-if="match.status == 'completed'">{{match.home_team.goals}}-{{match.away_team.goals}}</span>
-							<span class="score" v-if="match.status != 'completed'">{{time(match.datetime)}}</span>
+							<span class="score" v-if="match.status.startsWith('future')">{{time(match.datetime)}}</span>
+							<span class="score" v-if="match.status == 'in_progress'">now!</span>
 							<span :class="{bold:match.away_team.name==match.winner||match.winner=='Draw'}" class="away">{{match.away_team.name}}</span>
 							<flag :code="match.away_team.country"></flag>
 						</div>
@@ -84,7 +85,7 @@
 						<i v-if="details.status != 'future_scheduled'">({{details.away_team.penalties}} penalties)</i>
 					</span><br><br>
 				</div>
-				<span>{{(new Date(details.datetime)).toLocaleString()}}</span><br>
+				<span>{{time(details.datetime, true)}}</span><br>
 				<span>{{details.venue}}, {{details.location}}</span><span v-if="details.attendance"><br>({{details.attendance}} attendees)</span>
 				<hr>
 				<h3 class="left">Event List:</h3>

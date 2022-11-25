@@ -1,3 +1,5 @@
+const locale = navigator.languages && navigator.languages.length ? navigator.languages[0] : navigator.language;
+// const locale = "en-GB"
 
 async function getData(path) {return await (await fetch("https://worldcupjson.net"+path)).json()}
 
@@ -94,22 +96,18 @@ var app = new Vue({
 				this.details = false;
 			}
 		},
-		time: function (str) {
+		time: function (str, l) {
 			let date = new Date(str);
+			if (l) {
+				return Intl.DateTimeFormat(locale, {dateStyle:"long", timeStyle:"short"}).format(date) + " your time";
+			}
+
 			let now = new Date();
-			if (date.getFullYear()==now.getFullYear() && date.getMonth()==now.getMonth() && date.getDate()==now.getDate()) {
-				let half = (date.getHours() >= 12) ? "pm" : "am";
-				var hours = date.getHours() % 12;
-				if (hours == 0) {
-					hours = "12"
-				}
-				if (date.getHours()>now.getHours()) {
-					return hours + half;
-				} else {
-					return "now!";
-				}
+			let diff = (date-now) / (1000 * 60 * 60 * 24);
+			if (diff > 0 && diff < 1) {
+				return Intl.DateTimeFormat(locale, {hour:"numeric"}).format(date).replaceAll(" ","").toLowerCase();
 			} else {
-				return (date.getMonth()+1)+"/"+date.getDate()
+				return Intl.DateTimeFormat(locale, {month:'narrow',day:'2-digit'}).format(date).replaceAll(" ","");
 			}
 		}
 	}
