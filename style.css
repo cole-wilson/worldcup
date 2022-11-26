@@ -61,6 +61,61 @@ summary h2 {display: inline;}
 
 #groups .group {
 	max-height: none;
+    position: relative;
+    padding-top: 12px;
+}
+
+#groups .group h3 {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    border-radius: 100%;
+    flex-direction: column;
+    justify-content: center;
+}
+#groups .group h3 .lbl {
+    font-size: 13px;
+    line-height: 1;
+}
+#groups .group h3 .let {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.bg-gr-1,
+.bg-gr-a {
+    background-color: #e2c5f6;
+}
+.bg-gr-2,
+.bg-gr-b {
+    background-color: #94c3f7;
+}
+.bg-gr-3,
+.bg-gr-c {
+    background-color: #4bd9f1;
+}
+.bg-gr-4,
+.bg-gr-d {
+    background-color: #ffb769;
+}
+.bg-gr-5,
+.bg-gr-e {
+    background-color: #88c885;
+}
+.bg-gr-6,
+.bg-gr-f {
+    background-color: #ffbbbc;
+}
+.bg-gr-7,
+.bg-gr-g {
+    background-color: #a9c9dc;
+}
+.bg-gr-8,
+.bg-gr-h {
+    background-color: #d1c4a9;
 }
 
 #bracket {

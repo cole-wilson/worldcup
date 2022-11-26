@@ -22,12 +22,12 @@ Vue.component('match', {
 	<span><b>{{(match.id==64) ? "Final" : ((match.id==63) ? "Third Place" : "Match " +match.id)}}</b><br>{{this.$root.time(match.datetime, false, true)}}</span>
 	<br>
 	<flag size=2 :src="match.home_team.country"></flag>
-	<span class="home">{{name(match.home_team)}}</span><span class="away biggish">{{match.home_team.goals||" "}}</span>
+	<span :class="'home bg-gr-' + groupletter(match.home_team)">{{name(match.home_team)}}</span><span class="away biggish">{{match.home_team.goals||" "}}</span>
 	<br><br>
 	vs.
 	<br><br>
 	<flag size=2 :src="match.away_team.country"></flag>
-	<span class="home">{{name(match.away_team)}}</span><span class="away biggish">{{match.away_team.goals||" "}}</span>
+	<span :class="'home bg-gr-' + groupletter(match.away_team)">{{name(match.away_team)}}</span><span class="away biggish">{{match.away_team.goals||" "}}</span>
 </div>
 `,
 	methods: {
@@ -40,7 +40,18 @@ Vue.component('match', {
 			} else {
 				return team.name
 			}
-		}
+		},
+        groupletter: function(team) {
+            if (team.name == "To Be Determined") {
+				if (team.country.startsWith("RU")) return ""
+				else if (team.country.startsWith("W")) return ""
+				else if (team.country.startsWith("1")) return team.country.slice(1).toLowerCase()
+				else {
+                    return team.country.slice(1).toLowerCase()
+                }
+			}
+            return ''
+        }
 	}
 })
 

@@ -41,8 +41,11 @@
 			</div>
 			<div><details :open="current.id<49"><summary><h2>Groups</h2></summary>
 				<div id="groups">
-					<div v-for="group in groups" class="group">
-						<h3>Group {{group.letter.toUpperCase()}}</h3>
+					<div v-for="(group, key) in groups" class="group">
+                        <h3 :class="'bg-gr-' + (key + 1)">
+                            <div class="lbl">Group</div>
+                            <div class="let">{{group.letter.toUpperCase()}}</div>
+                        </h3>
 						<span style="display:inline-block" v-for="team in group.teams">
 							<flag :code="team.country"></flag><br>
 							{{team.country}}<br>
