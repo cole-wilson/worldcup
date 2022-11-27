@@ -211,3 +211,16 @@ summary h2 {display: inline;}
 	border-radius: 2px;
 	color: black;
 }
+
+table {
+	display: inline-block;
+	padding: 0px 40px 0px;
+	cursor: zoom-in;
+}
+
+table:focus {cursor:revert;outline:1px solid lightgrey;}
+table .hidden {display: none;}
+table:focus .hidden {display: revert;}
+table:focus[data-bold] {font-weight:bold;}
+table:focus tr::before {content: attr(data-key);font-weight: bold;}
+table:focus tr::after {content: attr(data-key);color:transparent}
