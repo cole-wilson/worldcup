@@ -57,13 +57,13 @@
 							<tr><td v-for="team in group.teams"><flag :code="team.country"></flag></td></tr>
 							<tr data-bold><td v-for="team in group.teams">{{team.country}}</td></tr>
 							<tr data-key="PTS"><td v-for="team in group.teams">{{team.group_points}}</td></tr>
+							<tr data-key="GD" class="hidden"><td v-for="team in group.teams">{{team.goal_differential}}</td></tr>
 							<tr data-key="MP" class="hidden"><td v-for="team in group.teams">{{team.games_played}}</td></tr>
 							<tr data-key="W" class="hidden"><td v-for="team in group.teams">{{team.wins}}</td></tr>
 							<tr data-key="D" class="hidden"><td v-for="team in group.teams">{{team.draws}}</td></tr>
 							<tr data-key="L" class="hidden"><td v-for="team in group.teams">{{team.losses}}</td></tr>
 							<tr data-key="GF" class="hidden"><td v-for="team in group.teams">{{team.goals_for}}</td></tr>
 							<tr data-key="GA" class="hidden"><td v-for="team in group.teams">{{team.goals_against}}</td></tr>
-							<tr data-key="GD" class="hidden"><td v-for="team in group.teams">{{team.goal_differential}}</td></tr>
 						</table>
 						<br>
 						<div
