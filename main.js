@@ -55,7 +55,7 @@ var app = new Vue({
 		details: false,
 		clicking: false,
 		ismoved: false,
-		currentcount: 1,
+		currentcount: 0,
 		currentgamenames: []
 	},
 	mounted: function () {
