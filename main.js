@@ -165,7 +165,7 @@ window.onblur = () => {
 async function poll() {
 	let currentgames = (await getData("/matches/current"))
 	app.currentgamenames = currentgames.map(g=>g.home_team.name + " v. " + g.away_team.name);
-	let newdata = currentgames[app.currentcount]
+	let newdata = currentgames[app.currentcount|0]
 	if (newdata !== undefined) {
 		app.matches[newdata.id-1] = newdata;
 		app.current = newdata;
