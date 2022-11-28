@@ -6,6 +6,7 @@ body {
 	background: lightgrey;
 	width: 100vw;
 }
+select,input {background:transparent;font-family: monospace;border:none;border-bottom:1px solid grey;}
 
 .bold {font-weight: bold}
 

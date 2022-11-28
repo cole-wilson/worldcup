@@ -54,12 +54,15 @@ var app = new Vue({
 		current: undefined,
 		details: false,
 		clicking: false,
-		ismoved: false
+		ismoved: false,
+		currentcount: 1,
+		currentgamenames: []
 	},
 	mounted: function () {
 		document.getElementById("loader").remove()
 	},
 	methods: {
+		poll: poll,
 		fullscreenCurrent: function () {
 			let elem = document.getElementById("current")
 			if (elem.requestFullscreen) {
@@ -108,7 +111,7 @@ var app = new Vue({
 			let now = new Date();
 			let diff = (date-now) / (1000 * 60 * 60 * 24);
 			if (diff > 0 && diff < 1) {
-				return Intl.DateTimeFormat(locale, {hour:"numeric"}).format(date).replaceAll(" ","").toLowerCase();
+				return Intl.DateTimeFormat(locale, {hour:"numeric"}).format(date).replaceAll(" ","").toLowerCase() + (date.getDate()==now.getDate()? "  " : "+1");
 			} else {
 				return Intl.DateTimeFormat(locale, {month:ish?'long':'narrow',day:'2-digit'}).format(date).replaceAll(" ",ish?" ":"");
 			}
@@ -144,6 +147,7 @@ window.onload = async () => {
 		app.current = temp[temp.length-1]
 	}
 	poll();
+	setInterval(poll, 57*1000)// every 57 seconds
 }
 window.onfocus = () => {document.title = "2022 FIFA World Cup Bracket"}
 window.onblur = () => {
@@ -159,12 +163,13 @@ window.onblur = () => {
 }
 
 async function poll() {
-	let newdata = (await getData("/matches/current"))[0]
+	let currentgames = (await getData("/matches/current"))
+	app.currentgamenames = currentgames.map(g=>g.home_team.name + " v. " + g.away_team.name);
+	let newdata = currentgames[app.currentcount]
 	if (newdata !== undefined) {
 		app.matches[newdata.id-1] = newdata;
 		app.current = newdata;
 	}
-	setTimeout(poll, 60*1000)//1min
 }
 var updated = {};
 async function detailedMatch(id) {

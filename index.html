@@ -46,6 +46,7 @@
 						{{current.away_team.name}}
 					</span>
 					<br><i class="loss">updates every minute</i>
+					<label v-if="currentgamenames.length>1"><br><br>show: <select @input="poll()" v-model="currentcount"><option v-for="(name, n) in currentgamenames" :value="n">{{name}}</option></select></label>
 				</div>
 				<hr>
 			</div>
