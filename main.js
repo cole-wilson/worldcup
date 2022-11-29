@@ -133,9 +133,17 @@ window.onload = async () => {
 		let groupteamids = teamdata[i].teams.map(t=>t.country);
 		let groupmatchids = [];
 
+		let maxpoints = teamdata[i].teams.map(t=>t.group_points).sort((a,b)=>b-a)[1]
+
 		groupmatchids = app.matches.filter(match=>{
 			return groupteamids.includes(match.home_team_country) && match.stage_name == "First stage"
 		}).map(m=>m.id-1).sort((a, b)=>{return a.id-b.id})
+
+		for (teamindex in groupteams) {
+			let t = groupteams[teamindex]
+			groupteams[teamindex].eliminated = t.group_points + ((3-t.games_played)*3) < maxpoints
+			console.log(groupteams[teamindex].eliminated)
+		}
 
 		app.groups.push({letter:groupname, teams:groupteams.sort((a,b)=>b.group_points-a.group_points||b.goal_differential-a.goal_differential), matches:groupmatchids})
 	}

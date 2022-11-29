@@ -90,7 +90,7 @@
 					<div v-for="group in groups" class="group">
 						<h3>Group {{group.letter.toUpperCase()}}</h3>
 						<table tabindex="0" title="click to show more details">
-							<tr><td v-for="team in group.teams"><flag :code="team.country"></flag></td></tr>
+							<tr><td :class="{loss:team.eliminated}" v-for="team in group.teams"><flag :code="team.country"></flag></td></tr>
 							<tr data-bold><td v-for="team in group.teams">{{team.country}}</td></tr>
 							<tr data-key="PTS"><td v-for="team in group.teams">{{team.group_points}}</td></tr>
 							<tr data-key="GD" class="hidden"><td v-for="team in group.teams">{{team.goal_differential}}</td></tr>
