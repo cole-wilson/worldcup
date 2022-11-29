@@ -1,11 +1,17 @@
 body {
 	margin: 0;
 	padding: 0;
+	overflow-x: hidden;
 	align-items: center;
 	font-family: monospace;
 	background: lightgrey;
 	width: 100vw;
 }
+
+html {font-family:monospace;text-align:center;}
+html::after {content:"loading...";display:inline-block;font-size:1.5em;padding-top:45vh;font-weight:bold}
+html.loaded::after {display:none;}
+
 select,input {background:transparent;font-family: monospace;border:none;border-bottom:1px solid grey;}
 
 .bold {font-weight: bold}
@@ -151,20 +157,6 @@ summary h2 {display: inline;}
 	left: 10px;
 }
 
-
-#loader {
-	display:block;
-	position: fixed;
-	width: 100vw;
-	height:100vh;
-	top:0;
-	left:0;
-	background:lightgrey;
-	z-index: 999;
-	text-align: center;
-	padding-top: 45vh;
-	font-weight: bold;
-}
 
 /* Works on Firefox */
 * {

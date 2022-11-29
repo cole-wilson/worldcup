@@ -59,7 +59,7 @@ var app = new Vue({
 		currentgamenames: []
 	},
 	mounted: function () {
-		document.getElementById("loader").remove()
+		document.documentElement.classList.add("loaded")
 	},
 	methods: {
 		poll: poll,
