@@ -12,7 +12,7 @@ html {font-family:monospace;text-align:center;}
 html::after {content:"loading...";display:inline-block;font-size:1.5em;padding-top:45vh;font-weight:bold}
 html.loaded::after {display:none;}
 
-select,input {background:transparent;font-family: monospace;border:none;border-bottom:1px solid grey;}
+select,input {background:transparent;font-family: monospace;border:none;border-bottom:1px solid grey;cursor:pointer;}
 
 .bold {font-weight: bold}
 
