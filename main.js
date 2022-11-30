@@ -1,6 +1,7 @@
 const locale = navigator.languages && navigator.languages.length ? navigator.languages[0] : navigator.language;
 // const locale = "en-GB"
 var mouseX;
+var updated = {};
 
 async function getData(path) {return await (await fetch("https://worldcupjson.net"+path)).json()}
 
@@ -137,6 +138,9 @@ document.body.onmousemove = (e) => {mouseX = e.clientX}
 
 window.onload = async () => {
 	app.matches = (await getData("/matches"))
+
+	override()
+
 	app.matches.map(m=>{})
 
 	let teamdata = (await getData("/teams")).groups
@@ -201,10 +205,22 @@ async function poll() {
 		app.matches[current.id-1] = newdata;
 	}
 }
-var updated = {};
+function override() {
+	console.log(1)
+	app.matches[38-1].winner_code = "TUN"
+	app.matches[38-1].winner = "Tunisia"
+	app.matches[38-1].away_team.goals = 0
+
+	try {
+		updated[38].winner_code = "TUN"
+		updated[38].winner = "Tunisia"
+		updated[38].away_team.goals = 0
+	} catch{console.log(999)}
+}
 async function detailedMatch(id) {
 	if (!(id in updated)) {
 		updated[id] = (await getData("/matches/"+id))
 	}
+	override()
 	app.details = updated[id]
 }
