@@ -77,6 +77,7 @@ summary h2 {display: inline;}
 	height: 100vh;
 	display: flex;
 }
+.bracketteam {max-width: 100%; display:inline-block}
 
 .col {
 	/* item stuff */
@@ -104,9 +105,7 @@ summary h2 {display: inline;}
 	text-align:center;
 }
 .group.blank {
-	min-height:25%;
-	background: none;
-	border: none;
+visibility:hidden;
 }
 .future, .loss {opacity: 30%;}
 .current {background:skyblue}

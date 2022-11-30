@@ -6,7 +6,7 @@ async function getData(path) {return await (await fetch("https://worldcupjson.ne
 
 Vue.component('flag', {
 	props: {code:String, size:{type:String,default:"1"}},
-	template: `	<img v-if="!(/\d/g).test(code)" :class="'img'+size" class="flag" :src="'https://api.fifa.com/api/v3/picture/flags-sq-'+size+'/'+code" :alt="code">`
+	template: `	<img onerror="this.remove()" :class="'img'+size" class="flag" :src="'https://api.fifa.com/api/v3/picture/flags-sq-'+size+'/'+code" :alt="code">`
 })
 Vue.component('match', {
 	props: ['match'],
@@ -17,28 +17,39 @@ Vue.component('match', {
 	@click="$root.showdetails(match.id, true)"
 	@focus="$root.showdetails(match.id, true)"
 	tabindex=0
-	:class="{future:match.status.startsWith('future'),current:match.id==$root.current.id}"
+	:class="{current:match.id==$root.current.id}"
 	@mouseleave="$root.closedetails()">
 	<span><b>{{(match.id==64) ? "Final" : ((match.id==63) ? "Third Place" : "Match " +match.id)}}</b><br>{{this.$root.time(match.datetime, false, true)}}</span>
+	<br><br>
+<div :class="{future:match.status.startsWith('future')}">
+	<flag size=1 :code="matchCountry(match.home_team.country)"></flag>
+	<span class="home">{{matchName(match.home_team)}}</span><span class="away biggish">{{match.home_team.goals||"-"}}</span>
 	<br>
-	<flag size=2 :src="match.home_team.country"></flag>
-	<span class="home">{{name(match.home_team)}}</span><span class="away biggish">{{match.home_team.goals||" "}}</span>
-	<br><br>
-	vs.
-	<br><br>
-	<flag size=2 :src="match.away_team.country"></flag>
-	<span class="home">{{name(match.away_team)}}</span><span class="away biggish">{{match.away_team.goals||" "}}</span>
+	<span class="loss">vs.</span>
+	<br>
+	<flag size=1 :code="matchCountry(match.away_team.country)"></flag>
+	<span class="home">{{matchName(match.away_team)}}</span><span class="away biggish">{{match.away_team.goals||"-"}}</span>
+</div>
 </div>
 `,
 	methods: {
-		name: function(team) {
+		matchName: function(team) {
 			if (team.name == "To Be Determined") {
 				if (team.country.startsWith("RU")) return "#" + team.country.slice(2) + " runner-up"
 				else if (team.country.startsWith("W")) return "#" + team.country.slice(1) + " winner"
-				else if (team.country.startsWith("1")) return team.country.slice(1) + " winner"
-				else return team.country.slice(1) + " runner-up"
+				else {return this.matchCountry(team.country, true)}
 			} else {
 				return team.name
+			}
+		},
+		matchCountry: function(country, name=false) {
+			let group = app.groups[country.charCodeAt(1)-65];
+			if (!group) return country
+			if (group.complete) {
+				let actual = group.teams[country[0]-1]
+				return name ? actual.name : actual.country
+			} else {
+				return name ? country.slice(1) + (country[1]==1 ? " winner" : " runner-up") : country
 			}
 		}
 	}
@@ -111,7 +122,7 @@ var app = new Vue({
 			let now = new Date();
 			let diff = (date-now) / (1000 * 60 * 60 * 24);
 			if (diff > 0 && diff < 1) {
-				return Intl.DateTimeFormat(locale, {hour:"numeric"}).format(date).replaceAll(" ","").toLowerCase() + (date.getDate()==now.getDate()? "  " : "+1");
+				return (date.getDate()==now.getDate()? "  " : "+") + Intl.DateTimeFormat(locale, {hour:"numeric"}).format(date).replaceAll(" ","").toLowerCase();
 			} else {
 				return Intl.DateTimeFormat(locale, {month:ish?'long':'narrow',day:'2-digit'}).format(date).replaceAll(" ",ish?" ":"");
 			}
@@ -125,6 +136,8 @@ document.body.onmousemove = (e) => {mouseX = e.clientX}
 
 window.onload = async () => {
 	app.matches = (await getData("/matches"))
+	app.matches.map(m=>{})
+
 	let teamdata = (await getData("/teams")).groups
 
 	for (var i=0;i<teamdata.length;i++) {
@@ -139,18 +152,26 @@ window.onload = async () => {
 			return groupteamids.includes(match.home_team_country) && match.stage_name == "First stage"
 		}).map(m=>m.id-1).sort((a, b)=>{return a.id-b.id})
 
+
+		var gamecount = 0;
 		for (teamindex in groupteams) {
 			let t = groupteams[teamindex]
+			gamecount += t.games_played
 			groupteams[teamindex].eliminated = t.group_points + ((3-t.games_played)*3) < maxpoints
-			console.log(groupteams[teamindex].eliminated)
+			// console.log(groupteams[teamindex].eliminated)
 		}
 
-		app.groups.push({letter:groupname, teams:groupteams.sort((a,b)=>b.group_points-a.group_points||b.goal_differential-a.goal_differential), matches:groupmatchids})
+		app.groups.push({
+			letter:groupname,
+			teams:groupteams.sort((a,b)=>b.group_points-a.group_points||b.goal_differential-a.goal_differential),
+			matches:groupmatchids,
+			complete:gamecount==12
+		})
 	}
 
 	app.current = app.matches.filter(m=>m.status=="in_progress")[0]
 	if (app.current === undefined) {
-		console.log(app.current)
+		// console.log(app.current)
 		let temp = app.matches.filter(m=>m.status=="completed").sort((a,b)=>{return Date(a.datetime) - Date(b.datetime)})
 		app.current = temp[temp.length-1]
 	}
