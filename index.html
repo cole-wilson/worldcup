@@ -38,7 +38,7 @@
 					<span class="score">
 						<span class="big">{{current.home_team.goals}}-{{current.away_team.goals}}<br></span><br>
 						<b v-if="current.time">{{current.time.replaceAll("full-time", "FT").replaceAll("90'", "FT")}}</b>
-						<b v-if="!current.time">FINAL</b>
+						<b v-if="!current.time" class="red">FINAL</b>
 					</span>
 					<span class="away center">
 						<flag size=3 :code="current.away_team.country"></flag><br>
@@ -89,7 +89,7 @@
 				<div id="groups">
 					<div v-for="group in groups" class="group">
 						<h3>Group {{group.letter.toUpperCase()}}</h3>
-						<i v-if="group.complete" class="red">final<br></i>
+						<b v-if="group.complete" class="red">FINAL<br></b>
 						<table tabindex="0" title="click to show more details">
 							<tr><td :class="{loss:team.eliminated}" v-for="team in group.teams"><flag :code="team.country"></flag></td></tr>
 							<tr data-bold><td v-for="team in group.teams">{{team.country}}</td></tr>
