@@ -197,8 +197,8 @@ async function poll() {
 	app.currentgamenames = currentgames.map(g=>g.home_team.name + " v. " + g.away_team.name);
 	let newdata = currentgames[app.currentcount|0]
 	if (newdata !== undefined) {
-		app.matches[newdata.id-1] = newdata;
 		app.current = newdata;
+		app.matches[current.id-1] = newdata;
 	}
 }
 var updated = {};
