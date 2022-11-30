@@ -49,7 +49,8 @@ Vue.component('match', {
 				let actual = group.teams[country[0]-1]
 				return name ? actual.name : actual.country
 			} else {
-				return name ? country.slice(1) + (country[1]==1 ? " winner" : " runner-up") : country
+				console.log(country)
+				return name ? country.slice(1) + (country[0]=="1" ? " winner" : " runner-up") : country
 			}
 		}
 	}
