@@ -108,6 +108,7 @@ summary h2 {display: inline;}
 visibility:hidden;
 }
 .future, .loss {opacity: 30%;}
+.red {color:red}
 .current {background:skyblue}
 .center {text-align:center}
 .left {text-align:left;}
@@ -181,7 +182,7 @@ visibility:hidden;
 }
 
 
-@media (max-width:700px) {
+@media (max-width:750px) {
 	header {max-width:100%}
 	#current {width: 100%;}
 	.img3 {width: 20vw;}

@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width">
 		<title>2022 FIFA World Cup bracket and standings</title>
-		<link rel="stylesheet" href="./style.css?refresh=4">
+		<link rel="stylesheet" href="./style.css?refresh=5">
 		<base target="_blank"></base>
 		<meta name="title" content="2022 FIFA World Cup bracket and standings">
 		<meta name="description" content="A data packed ad-free website designed to help you track 2022's FIFA World Cup bracket and standings. View interactive brackets and data!">
@@ -89,6 +89,7 @@
 				<div id="groups">
 					<div v-for="group in groups" class="group">
 						<h3>Group {{group.letter.toUpperCase()}}</h3>
+						<i v-if="group.complete" class="red">final<br></i>
 						<table tabindex="0" title="click to show more details">
 							<tr><td :class="{loss:team.eliminated}" v-for="team in group.teams"><flag :code="team.country"></flag></td></tr>
 							<tr data-bold><td v-for="team in group.teams">{{team.country}}</td></tr>
@@ -225,6 +226,6 @@
 			<br>
 		</div>
 		<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-		<script src="./main.js?reload=3"></script>
+		<script src="./main.js?reload=4"></script>
 	</body>
 </html>
