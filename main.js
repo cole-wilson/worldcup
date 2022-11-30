@@ -144,6 +144,11 @@ window.onload = async () => {
 	app.matches.map(m=>{})
 
 	let teamdata = (await getData("/teams")).groups
+	teamdata[3].teams.map(t=>{
+		if (t.country=='TUN') {t.group_points=4;}
+		if (t.country=='FRA') {t.group_points=6;}
+	})
+
 
 	for (var i=0;i<teamdata.length;i++) {
 		let groupname = teamdata[i].letter.toLowerCase();
