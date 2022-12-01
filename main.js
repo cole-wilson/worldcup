@@ -11,6 +11,7 @@ Vue.component('flag', {
 })
 Vue.component('match', {
 	props: ['match'],
+	// template: "<span>{{match.id}}</span>",
 	template: `
 <div :id="match.id"
 	class="group"
@@ -35,6 +36,7 @@ Vue.component('match', {
 `,
 	methods: {
 		matchName: function(team) {
+			console.warn(team)
 			if (team.name == "To Be Determined") {
 				if (team.country.startsWith("RU")) return "#" + team.country.slice(2) + " runner-up"
 				else if (team.country.startsWith("W")) return "#" + team.country.slice(1) + " winner"
@@ -44,13 +46,13 @@ Vue.component('match', {
 			}
 		},
 		matchCountry: function(country, name=false) {
+			console.log(country)
 			let group = app.groups[country.charCodeAt(1)-65];
 			if (!group) return country
 			if (group.complete) {
 				let actual = group.teams[country[0]-1]
-				return name ? actual.name : actual.country
+				return name ? actual.name : country
 			} else {
-				console.log(country)
 				return name ? country.slice(1) + (country[0]=="1" ? " winner" : " runner-up") : country
 			}
 		}
@@ -225,7 +227,7 @@ function override() {
 		updated[38].winner_code = "TUN"
 		updated[38].winner = "Tunisia"
 		updated[38].away_team.goals = 0
-	} catch{console.log(999)}
+	} catch{}
 }
 async function detailedMatch(id) {
 	if (!(id in updated)) {
