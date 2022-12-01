@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width">
 		<title>2022 FIFA World Cup bracket and standings</title>
-		<link rel="stylesheet" href="./style.css?refresh=6">
+		<link rel="stylesheet" href="./style.css?refresh=7">
 		<base target="_blank"></base>
 		<meta name="title" content="2022 FIFA World Cup bracket and standings">
 		<meta name="description" content="A data packed ad-free website designed to help you track 2022's FIFA World Cup bracket and standings. View interactive brackets and data!">
@@ -19,6 +19,7 @@
 	</head>
 	<body>
 		<div id="app">
+			<div id="banner" v-if="showbanner"><a @click="closebanner()" id="closebanner">&times;</a><a href="https://www.producthunt.com/posts/interactive-world-cup-standings">like it? review it on ProductHunt!</a></div>
 			<div id="top">
 				<header>
 					<h1>2022 FIFA World Cup bracket and standings</h1>

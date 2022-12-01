@@ -69,12 +69,17 @@ var app = new Vue({
 		clicking: false,
 		ismoved: false,
 		currentcount: 0,
-		currentgamenames: []
+		currentgamenames: [],
+		showbanner: (localStorage.getItem("bannerclosed")<3)
 	},
 	mounted: function () {
 		setTimeout(_=>document.documentElement.classList.add("loaded"), 1000)
 	},
 	methods: {
+		closebanner: function() {
+			this.showbanner=false;
+			localStorage.setItem("bannerclosed", (localStorage.getItem("bannerclosed")|0)+1)
+		},
 		poll: poll,
 		fullscreenCurrent: function () {
 			let elem = document.getElementById("current")

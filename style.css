@@ -8,6 +8,11 @@ body {
 	width: 100vw;
 }
 
+
+#banner {background:#FF0000AA;width:100%;text-align:center;padding: 3px 0 3px;}
+#banner a {color:white}
+#closebanner {position:absolute;left:3px;font-size: 1.3em;vertical-align:middle;cursor:pointer}
+
 html {font-family:monospace;text-align:center;}
 html::after {content:"loading...";display:inline-block;font-size:1.5em;padding-top:45vh;font-weight:bold}
 html.loaded::after {display:none;}
@@ -74,7 +79,7 @@ summary h2 {display: inline;}
 	width: 100vw;
 	padding: 0px;
 	overflow: auto;
-	height: 100vh;
+	min-height: 100vh;
 	display: flex;
 }
 .bracketteam {max-width: 100%; display:inline-block}
