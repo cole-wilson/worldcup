@@ -72,7 +72,7 @@ var app = new Vue({
 		ismoved: false,
 		currentcount: 0,
 		currentgamenames: [],
-		showbanner: (localStorage.getItem("bannerclosed")<3)
+		showbanner: false//(localStorage.getItem("bannerclosed")<3)
 	},
 	mounted: function () {
 		setTimeout(_=>document.documentElement.classList.add("loaded"), 1000)
