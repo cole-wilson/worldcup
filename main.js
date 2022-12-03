@@ -19,36 +19,51 @@ Vue.component('match', {
 	@click="$root.showdetails(match.id, true)"
 	@focus="$root.showdetails(match.id, true)"
 	tabindex=0
-	:class="{current:match.id==$root.current.id}"
+	:class="{current:match.id==$root.current.id,final:match.id==64}"
 	@mouseleave="$root.closedetails()">
 	<span><b>{{(match.id==64) ? "Final" : ((match.id==63) ? "Third Place" : "Match " +match.id)}}</b><br>{{this.$root.time(match.datetime, false, true)}}</span>
 	<br><br>
 <div :class="{future:match.status.startsWith('future')}">
 	<flag size=1 :code="matchCountry(match.home_team.country)"></flag>
-	<span class="home">{{matchName(match.home_team)}}</span><span class="away biggish">{{match.home_team.goals||"-"}}</span>
+	<span class="home" :class="{bold:match.home_team.name==match.winner||match.winner=='Draw'}">{{matchName(match.home_team)}}</span><span class="away biggish">{{match.home_team.goals}}</span>
 	<br>
 	<span class="loss">vs.</span>
 	<br>
 	<flag size=1 :code="matchCountry(match.away_team.country)"></flag>
-	<span class="home">{{matchName(match.away_team)}}</span><span class="away biggish">{{match.away_team.goals||"-"}}</span>
+	<span class="home" :class="{bold:match.away_team.name==match.winner||match.winner=='Draw'}">{{matchName(match.away_team)}}</span><span class="away biggish">{{match.away_team.goals}}</span>
 </div>
+<br>
 </div>
 `,
 	methods: {
 		matchName: function(team) {
-			console.warn(team)
-			if (team.name == "To Be Determined") {
-				if (team.country.startsWith("RU")) return "#" + team.country.slice(2) + " runner-up"
-				else if (team.country.startsWith("W")) return "#" + team.country.slice(1) + " winner"
-				else {return this.matchCountry(team.country, true)}
-			} else {
+			if (team.name != "To Be Determined") {
 				return team.name
+			}
+			else if (team.country.startsWith("RU")) {
+				return "#" + team.country.slice(2) + " runner-up"
+			}
+			else if (team.country.startsWith("W")) {
+				return app.matches[team.country.slice(1)-1].winner || "#" + team.country.slice(1) + " winner"
+			}
+			else {
+				return this.matchCountry(team.country, true)
 			}
 		},
 		matchCountry: function(country, name=false) {
 			console.log(country)
 			let group = app.groups[country.charCodeAt(1)-65];
-			if (!group) return country
+			if (!group) {
+				if (country.startsWith("RU")) {
+					return country
+				}
+				else if (country.startsWith("W")) {
+					return app.matches[country.slice(1)-1].winner_code || "#" + country
+				}
+				else {
+					return country
+				}
+			}
 			if (group.complete) {
 				let actual = group.teams[country[0]-1]
 				return name ? actual.name : country
