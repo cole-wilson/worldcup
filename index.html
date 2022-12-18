@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width">
 		<title>2022 FIFA World Cup bracket and standings</title>
-		<link rel="stylesheet" href="./style.css?refresh=7">
+		<link rel="stylesheet" href="./style.css?refresh=8">
 		<base target="_blank"></base>
 		<meta name="title" content="2022 FIFA World Cup bracket and standings">
 		<meta name="description" content="A data packed ad-free website designed to help you track 2022's FIFA World Cup bracket and standings. View interactive brackets and data!">
@@ -18,8 +18,9 @@
 		<meta property="twitter:description" content="A data packed ad-free website designed to help you track 2022's FIFA World Cup bracket and standings. View interactive brackets and data!">
 	</head>
 	<body>
+		<canvas></canvas>
 		<div id="app">
-			<div id="banner" v-if="showbanner"><a @click="closebanner()" id="closebanner">&times;</a><a href="https://www.producthunt.com/posts/interactive-world-cup-standings">like it? review it on ProductHunt!</a></div>
+			<div id="banner">Argentina Wins!</div>
 			<div id="top">
 				<header>
 					<h1>2022 FIFA World Cup bracket and standings</h1>
@@ -34,7 +35,8 @@
 					<br><br>
 					<span class="home center">
 						<flag size=3 :code="current.home_team.country"></flag><br>
-						{{current.home_team.name}}
+						{{current.home_team.name}}<br>
+						<b v-if="current.home_team.penalties||current.away_team.penalties">({{current.home_team.penalties}})</b>
 					</span>
 					<span class="score">
 						<span class="big">{{current.home_team.goals}}-{{current.away_team.goals}}<br></span><br>
@@ -43,7 +45,8 @@
 					</span>
 					<span class="away center">
 						<flag size=3 :code="current.away_team.country"></flag><br>
-						{{current.away_team.name}}
+						{{current.away_team.name}}<br>
+						<b v-if="current.home_team.penalties||current.away_team.penalties">({{current.away_team.penalties}})</b>
 					</span>
 					<br><i class="loss">updates every minute</i>
 					<label class="bold" v-if="currentgamenames.length>1"><br><br>showing match {{currentcount+1}}/{{currentgamenames.length}}: <select @input="poll()" v-model="currentcount"><option v-for="(name, n) in currentgamenames" :value="n">{{name}}</option></select></label>
@@ -67,7 +70,11 @@
 						<match :match="matches[61-1]"></match>
 					</div>
 					<div class="col middle">
-						<match class="blank" :match="matches[63-1]"></match>
+						<!-- <match class="blank" :match="matches[63-1]"></match> -->
+						<div class="group transparent">
+							<img id="trophy" src="https://snipstock.com/assets/cdn/png/6a91ab2c3e85fe8bfbce22d7bd0add63.png"><br>
+							<b>Argentina Wins!</b>
+						</div>
 						<match :match="matches[64-1]"></match>
 						<match :match="matches[63-1]"></match>
 					</div>
@@ -227,6 +234,6 @@
 			<br>
 		</div>
 		<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-		<script src="./main.js?reload=7"></script>
+		<script src="./main.js?reload=8"></script>
 	</body>
 </html>

@@ -9,8 +9,7 @@ body {
 }
 
 
-#banner {background:#FF0000AA;width:100%;text-align:center;padding: 3px 0 3px;}
-#banner a {color:white}
+#banner {background:#75aadb;width:100%;text-align:center;padding: 3px 0 3px;color:white}
 #closebanner {position:absolute;left:3px;font-size: 1.3em;vertical-align:middle;cursor:pointer}
 
 html {font-family:monospace;text-align:center;}
@@ -25,6 +24,21 @@ select,input {background:transparent;font-family: monospace;border:none;border-b
 .home {width: 28%;text-align:left;}
 .score {min-width:10%;text-align:center;}
 .away {width:28%;text-align:right;}
+.pen {font-size: 11px;vertical-align:middle}
+.transparent {background: none!important}
+
+canvas {
+	pointer-events: none;
+	position: fixed;
+	left:0;top:0;
+}
+
+#trophy {
+	/* position: absolute; */
+	top: 0px;
+	width: 70px;
+	border:none;
+}
 
 #top {
 	margin: 10px;
@@ -76,7 +90,7 @@ summary h2 {display: inline;}
 }
 
 #bracket {
-	width: 100vw;
+	width: 98vw;
 	padding: 0px;
 	overflow: auto;
 	min-height: 100vh;

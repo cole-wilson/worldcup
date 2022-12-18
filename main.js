@@ -25,12 +25,19 @@ Vue.component('match', {
 	<br><br>
 <div :class="{future:match.status.startsWith('future')}">
 	<flag size=1 :code="matchCountry(match.home_team.country)"></flag>
-	<span class="home" :class="{bold:match.home_team.name==match.winner||match.winner=='Draw'}">{{matchName(match.home_team)}}</span><span class="away biggish">{{match.home_team.goals}}</span>
+	<span class="home" :class="{bold:match.home_team.name==match.winner||match.winner=='Draw'}">
+		{{matchName(match.home_team)}}</span>
+		<span class="away biggish">{{match.home_team.goals}}
+		<span class="pen" v-if="match.away_team.penalties||match.home_team.penalties">({{match.home_team.penalties}})</span></span>
 	<br>
 	<span class="loss">vs.</span>
 	<br>
 	<flag size=1 :code="matchCountry(match.away_team.country)"></flag>
-	<span class="home" :class="{bold:match.away_team.name==match.winner||match.winner=='Draw'}">{{matchName(match.away_team)}}</span><span class="away biggish">{{match.away_team.goals}}</span>
+	<span class="home" :class="{bold:match.away_team.name==match.winner||match.winner=='Draw'}">
+		{{matchName(match.away_team)}}</span>
+		<span class="away biggish">{{match.away_team.goals}}
+			<span class="pen" v-if="match.away_team.penalties||match.home_team.penalties">({{match.away_team.penalties}})</span>
+		</span>
 </div>
 <br>
 </div>
@@ -209,6 +216,7 @@ window.onload = async () => {
 	}
 	poll();
 	setInterval(poll, 57*1000)// every 57 seconds
+	confetti()
 }
 window.onfocus = () => {document.title = "2022 FIFA World Cup Bracket"}
 window.onblur = () => {
@@ -250,4 +258,7 @@ async function detailedMatch(id) {
 	}
 	override()
 	app.details = updated[id]
+}
+
+function confetti() {
 }
