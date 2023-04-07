@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="loaded">
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width">
@@ -18,222 +18,228 @@
 		<meta property="twitter:description" content="A data packed ad-free website designed to help you track 2022's FIFA World Cup bracket and standings. View interactive brackets and data!">
 	</head>
 	<body>
-		<canvas></canvas>
-		<div id="app">
-			<div id="banner">Argentina Wins!</div>
-			<div id="top">
-				<header>
-					<h1>2022 FIFA World Cup bracket and standings</h1>
-					<span>A simple website designed to help you track 2022's FIFA World Cup bracket and standings. Data is from <a href="https://worldcupjson.net/">worldcupjson.net</a> and the flags are from FIFA, thanks! Click on a match to show a play-by-play view, and view live score updates! The current (or most recent) game appears at the top of your screen. Once the group games are done, scroll down to see an entire tournament bracket also updated in real time. <b>If you have any suggestions, be sure to post them <a href="https://news.ycombinator.com/item?id=33737258">here</a>, and I'll add them ASAP!</b> <a href="https://www.amnesty.org/en/latest/campaigns/2016/03/qatar-world-cup-of-shame/">Learn about stadium worker solidarity.</a><br><br>
-						(c) <a href="https://cole.ws">cole wilson 2022</a></span>
-						<a href="//buymeacoffee.com/colewilson" class="coffee">⚽ support my work!</a>
+		<br><br><br>
+		unfortunately the data source (worldcupjson.net) is unavailable at the moment,
+		<br>
+		and I do not have a backup of the match data. please let me know if you do!
+		<br><br>
+		because of this, the website is down until the Women's World Cup in 2024.
+		<!-- <canvas></canvas> -->
+		<!-- <div id="app"> -->
+		<!-- 	<div id="banner">Argentina Wins!</div> -->
+		<!-- 	<div id="top"> -->
+		<!-- 		<header> -->
+		<!-- 			<h1>2022 FIFA World Cup bracket and standings</h1> -->
+		<!-- 			<span>A simple website designed to help you track 2022's FIFA World Cup bracket and standings. Data is from <a href="https://worldcupjson.net/">worldcupjson.net</a> and the flags are from FIFA, thanks! Click on a match to show a play-by-play view, and view live score updates! The current (or most recent) game appears at the top of your screen. Once the group games are done, scroll down to see an entire tournament bracket also updated in real time. <b>If you have any suggestions, be sure to post them <a href="https://news.ycombinator.com/item?id=33737258">here</a>, and I'll add them ASAP!</b> <a href="https://www.amnesty.org/en/latest/campaigns/2016/03/qatar-world-cup-of-shame/">Learn about stadium worker solidarity.</a><br><br> -->
+		<!-- 				(c) <a href="https://cole.ws">cole wilson 2022</a></span> -->
+		<!-- 				<a href="//buymeacoffee.com/colewilson" class="coffee">⚽ support my work!</a> -->
 
-				</header>
-				<div @dblclick="fullscreenCurrent" id="current" v-if="current !== undefined">
-					<span id="closemessage">press [esc] to exit fullscreen</span>
-					<span id="openmessage" class="loss">double-click to open fullscreen</span>
-					<br><br>
-					<span class="home center">
-						<flag size=3 :code="current.home_team.country"></flag><br>
-						{{current.home_team.name}}<br>
-						<b v-if="current.home_team.penalties||current.away_team.penalties">({{current.home_team.penalties}})</b>
-					</span>
-					<span class="score">
-						<span class="big">{{current.home_team.goals}}-{{current.away_team.goals}}<br></span><br>
-						<b v-if="current.time">{{current.time.replaceAll("full-time", "FT").replaceAll("90'", "FT")}}</b>
-						<b v-if="!current.time" class="red">FINAL</b>
-					</span>
-					<span class="away center">
-						<flag size=3 :code="current.away_team.country"></flag><br>
-						{{current.away_team.name}}<br>
-						<b v-if="current.home_team.penalties||current.away_team.penalties">({{current.away_team.penalties}})</b>
-					</span>
-					<br><i class="loss">updates every minute</i>
-					<label class="bold" v-if="currentgamenames.length>1"><br><br>showing match {{currentcount+1}}/{{currentgamenames.length}}: <select @input="poll()" v-model="currentcount"><option v-for="(name, n) in currentgamenames" :value="n">{{name}}</option></select></label>
-				</div>
-				<hr>
-			</div>
-			<details :open="current.id>48"><summary><h2>Tournament Bracket</h2></summary>
-				<div id="bracket" v-if="matches.length>0">
-					<br><br><br>
-					<div class="col left">
-						<match :match="matches[49-1]"></match>
-						<match :match="matches[50-1]"></match>
-						<match :match="matches[53-1]"></match>
-						<match :match="matches[54-1]"></match>
-					</div>
-					<div class="col left">
-						<match :match="matches[58-1]"></match>
-						<match :match="matches[57-1]"></match>
-					</div>
-					<div class="col left">
-						<match :match="matches[61-1]"></match>
-					</div>
-					<div class="col middle">
-						<!-- <match class="blank" :match="matches[63-1]"></match> -->
-						<div class="group transparent">
-							<img id="trophy" src="https://snipstock.com/assets/cdn/png/6a91ab2c3e85fe8bfbce22d7bd0add63.png"><br>
-							<b>Argentina Wins!</b>
-						</div>
-						<match :match="matches[64-1]"></match>
-						<match :match="matches[63-1]"></match>
-					</div>
-					<div class="col right">
-						<match :match="matches[62-1]"></match>
-					</div>
-					<div class="col right">
-						<match :match="matches[60-1]"></match>
-						<match :match="matches[59-1]"></match>
-					</div>
-					<div class="col right">
-						<match :match="matches[51-1]"></match>
-						<match :match="matches[52-1]"></match>
-						<match :match="matches[55-1]"></match>
-						<match :match="matches[56-1]"></match>
-					</div>
-			</div></details>
-			<hr>
-			<div><details :open="current.id<49"><summary><h2>Group Round</h2></summary>
-				<div id="groups">
-					<div v-for="group in groups" class="group">
-						<h3>Group {{group.letter.toUpperCase()}}</h3>
-						<b v-if="group.complete" class="red">FINAL<br></b>
-						<table tabindex="0" title="click to show more details">
-							<tr><td :class="{loss:team.eliminated||(group.complete&&i>1)}" v-for="(team,i) in group.teams"><flag :code="team.country"></flag></td></tr>
-							<tr data-bold><td v-for="team in group.teams">{{team.country}}</td></tr>
-							<tr data-key="PTS"><td v-for="team in group.teams">{{team.group_points}}</td></tr>
-							<tr data-key="GD" class="hidden"><td v-for="team in group.teams">{{team.goal_differential}}</td></tr>
-							<tr data-key="MP" class="hidden"><td v-for="team in group.teams">{{team.games_played}}</td></tr>
-							<tr data-key="W" class="hidden"><td v-for="team in group.teams">{{team.wins}}</td></tr>
-							<tr data-key="D" class="hidden"><td v-for="team in group.teams">{{team.draws}}</td></tr>
-							<tr data-key="L" class="hidden"><td v-for="team in group.teams">{{team.losses}}</td></tr>
-							<tr data-key="GF" class="hidden"><td v-for="team in group.teams">{{team.goals_for}}</td></tr>
-							<tr data-key="GA" class="hidden"><td v-for="team in group.teams">{{team.goals_against}}</td></tr>
-						</table>
-						<br>
-						<div
-							v-for="match in group.matches.map(id=>matches[id])"
-							@mouseover="showdetails(match.id)"
-							@click="showdetails(match.id, true)"
-							@focus="showdetails(match.id, true)"
-							@mouseleave="closedetails()"
-							:class="{future:match.status=='future_scheduled',current:match.id==current.id}"
-							class="gmatch"
-							:id="match.id"
-							tabindex="0">
-							<!-- {{String(match.id).padStart(2, "&nbsp;")}} -->
-							<flag :code="match.home_team.country"></flag>
-							<span :class="{bold:match.home_team.name==match.winner||match.winner=='Draw'}" class="home">{{match.home_team.name}}</span>
-							<span class="score" v-if="match.status == 'completed'">{{match.home_team.goals}}-{{match.away_team.goals}}</span>
-							<span class="score" v-if="match.status.startsWith('future')">{{time(match.datetime)}}</span>
-							<span class="score" v-if="match.status == 'in_progress'">now!</span>
-							<span :class="{bold:match.away_team.name==match.winner||match.winner=='Draw'}" class="away">{{match.away_team.name}}</span>
-							<flag :code="match.away_team.country"></flag>
-						</div>
-					</div>
-				</div>
-			</details></div>
-			<div id="matchdetails" v-if="details" :class="{moved:ismoved}">
-				<a href="#" target="_top" @click="details=false" title="close details">&times;</a>
-				<div class="">
-					<b>Match #{{details.id}}</b><br><br>
-					<span class="home center">
-						<flag size=2 :code="details.home_team.country"></flag><br>
-						{{details.home_team.name}}<br>
-						<i v-if="details.status != 'future_scheduled'">({{details.home_team.penalties}} penalties)</i>
-					</span>
-					<span class="score" v-if="details.status == 'completed'">{{details.home_team.goals}}-{{details.away_team.goals}}</span>
-					<span class="score" v-if="details.status != 'completed'">vs.</span>
-					<span class="away center">
-						<flag size=2 :code="details.away_team.country"></flag><br>
-						{{details.away_team.name}}<br>
-						<i v-if="details.status != 'future_scheduled'">({{details.away_team.penalties}} penalties)</i>
-					</span><br><br>
-				</div>
-				<span>{{time(details.datetime, true)}}</span><br>
-				<span>{{details.venue}}, {{details.location}}</span><span v-if="details.attendance"><br>({{details.attendance}} attendees)</span>
-				<hr>
-				<h3 class="left">Event List:</h3>
-				<div v-if="events(details).length == 0">(none yet)</div>
-				<div v-else-if v-for="event in events(details)">
-					<span class="half right"><span v-if="event.class=='left'">
-							{{event.time}} <b>{{event.type_of_event}}</b><br>
-							{{event.player}}<del v-if="event.off"><br>{{event.off}}</del>
-							<br><br>
-					</span></span>
-					<span class="half left"><span v-if="event.class=='right'">
-							<b>{{event.type_of_event}}</b> {{event.time}}<br>
-							{{event.player}}<del v-if="event.off"><br>{{event.off}}</del>
-							<br><br>
-					</span></span>
-				</div>
-				<hr>
-				<h3 class="left">Players:</h3>
-				<!-- <table id="lineup"> -->
-				<!-- 	<tr> -->
-				<!-- 		<td><span v-for="player in details.home_team_lineup.starting_eleven.filter(p=>p.position=='Goalkeeper')">{{player.shirt_number}}</span></td> -->
-				<!-- 		<td><span v-for="player in details.home_team_lineup.starting_eleven.filter(p=>p.position=='Goalkeeper')">{{player.shirt_number}}</span></td> -->
-				<!-- 		<td><span v-for="player in details.home_team_lineup.starting_eleven.filter(p=>p.position=='Goalkeeper')">{{player.shirt_number}}</span></td> -->
-				<!-- 		<td>def</td> -->
-				<!-- 		<td>mid</td> -->
-				<!-- 		<td>fwd</td> -->
-				<!-- 		<td>fwd</td> -->
-				<!-- 		<td>mid</td> -->
-				<!-- 		<td>def</td> -->
-				<!-- 		<td>goal</td> -->
-				<!-- 	</tr> -->
-				<!-- </table> -->
-				<h5>(g:goalkeeper, d:defender, m:midfielder, f:forward, u:unknown)</h5>
-				<div>
-					<span class="half left">
-						<span v-for="player in details.home_team_lineup.starting_eleven">
-							<b>{{String(player.shirt_number).padStart(2,0)}}</b> {{player.name}} <i>{{player.position[0].toLowerCase()}}</i><br>
-						</span>
-					</span>
-					<span class="half right">
-						<span v-for="player in details.away_team_lineup.starting_eleven">
-							<i>{{player.position[0].toLowerCase()}}</i> {{player.name}} <b>{{String(player.shirt_number).padStart(2,0)}}</b><br>
-						</span>
-					</span>
-				</div>
-				<h4>substitutes</h4>
-				<div>
-					<span class="half left">
-						<span v-for="player in details.home_team_lineup.substitutes">
-							<b>{{String(player.shirt_number).padStart(2,0)}}</b> {{player.name}} <i>{{player.position[0].toLowerCase()}}</i><br>
-						</span>
-					</span>
-					<span class="half right">
-						<span v-for="player in details.away_team_lineup.substitutes">
-							 <i>{{player.position[0].toLowerCase()}}</i> {{player.name}} <b>{{String(player.shirt_number).padStart(2,0)}}</b><br>
-						</span>
-					</span>
-				</div>
-				<hr>
-				<h3 class="left">Officials:</h3>
-				<div v-if="details.officials.length==0">(none yet)</div>
-				<div v-for="official in details.officials" class="left">
-					<flag :code="official.country"></flag>
-					<b>{{official.name}}</b>
-					<i>{{official.role}}</i>
-				</div>
-				<hr>
-				<h3 class="left">Weather:</h3>
-				{{details.weather.description}}<br>
-				{{Math.round((details.weather.temp_celsius*1.8) + 32)}}&deg;F
-				{{details.weather.temp_celsius}}&deg;C
-				<hr>
-				<i>last updated at {{details.last_checked_at}} - <a :href="'https://worldcupjson.net/matches/'+details.id">details</a></i>
-			</div>
-			<hr>
-			<br>
-			<div align='center'>
-				page views:<img src='https://www.free-website-hit-counter.com/c.php?d=9&id=141496&s=5' border='0' alt='Free Website Hit Counter'>
-				<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/cole-wilson/worldcup?label=last%20update">
-			</div>
-			<br>
-		</div>
-		<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-		<script src="./main.js?reload=8"></script>
+		<!-- 		</header> -->
+		<!-- 		<div @dblclick="fullscreenCurrent" id="current" v-if="current !== undefined"> -->
+		<!-- 			<span id="closemessage">press [esc] to exit fullscreen</span> -->
+		<!-- 			<span id="openmessage" class="loss">double-click to open fullscreen</span> -->
+		<!-- 			<br><br> -->
+		<!-- 			<span class="home center"> -->
+		<!-- 				<flag size=3 :code="current.home_team.country"></flag><br> -->
+		<!-- 				{{current.home_team.name}}<br> -->
+		<!-- 				<b v-if="current.home_team.penalties||current.away_team.penalties">({{current.home_team.penalties}})</b> -->
+		<!-- 			</span> -->
+		<!-- 			<span class="score"> -->
+		<!-- 				<span class="big">{{current.home_team.goals}}-{{current.away_team.goals}}<br></span><br> -->
+		<!-- 				<b v-if="current.time">{{current.time.replaceAll("full-time", "FT").replaceAll("90'", "FT")}}</b> -->
+		<!-- 				<b v-if="!current.time" class="red">FINAL</b> -->
+		<!-- 			</span> -->
+		<!-- 			<span class="away center"> -->
+		<!-- 				<flag size=3 :code="current.away_team.country"></flag><br> -->
+		<!-- 				{{current.away_team.name}}<br> -->
+		<!-- 				<b v-if="current.home_team.penalties||current.away_team.penalties">({{current.away_team.penalties}})</b> -->
+		<!-- 			</span> -->
+		<!-- 			<br><i class="loss">updates every minute</i> -->
+		<!-- 			<label class="bold" v-if="currentgamenames.length>1"><br><br>showing match {{currentcount+1}}/{{currentgamenames.length}}: <select @input="poll()" v-model="currentcount"><option v-for="(name, n) in currentgamenames" :value="n">{{name}}</option></select></label> -->
+		<!-- 		</div> -->
+		<!-- 		<hr> -->
+		<!-- 	</div> -->
+		<!-- 	<details :open="current.id>48"><summary><h2>Tournament Bracket</h2></summary> -->
+		<!-- 		<div id="bracket" v-if="matches.length>0"> -->
+		<!-- 			<br><br><br> -->
+		<!-- 			<div class="col left"> -->
+		<!-- 				<match :match="matches[49-1]"></match> -->
+		<!-- 				<match :match="matches[50-1]"></match> -->
+		<!-- 				<match :match="matches[53-1]"></match> -->
+		<!-- 				<match :match="matches[54-1]"></match> -->
+		<!-- 			</div> -->
+		<!-- 			<div class="col left"> -->
+		<!-- 				<match :match="matches[58-1]"></match> -->
+		<!-- 				<match :match="matches[57-1]"></match> -->
+		<!-- 			</div> -->
+		<!-- 			<div class="col left"> -->
+		<!-- 				<match :match="matches[61-1]"></match> -->
+		<!-- 			</div> -->
+		<!-- 			<div class="col middle"> -->
+		<!-- 				<!-1- <match class="blank" :match="matches[63-1]"></match> -1-> -->
+		<!-- 				<div class="group transparent"> -->
+		<!-- 					<img id="trophy" src="https://snipstock.com/assets/cdn/png/6a91ab2c3e85fe8bfbce22d7bd0add63.png"><br> -->
+		<!-- 					<b>Argentina Wins!</b> -->
+		<!-- 				</div> -->
+		<!-- 				<match :match="matches[64-1]"></match> -->
+		<!-- 				<match :match="matches[63-1]"></match> -->
+		<!-- 			</div> -->
+		<!-- 			<div class="col right"> -->
+		<!-- 				<match :match="matches[62-1]"></match> -->
+		<!-- 			</div> -->
+		<!-- 			<div class="col right"> -->
+		<!-- 				<match :match="matches[60-1]"></match> -->
+		<!-- 				<match :match="matches[59-1]"></match> -->
+		<!-- 			</div> -->
+		<!-- 			<div class="col right"> -->
+		<!-- 				<match :match="matches[51-1]"></match> -->
+		<!-- 				<match :match="matches[52-1]"></match> -->
+		<!-- 				<match :match="matches[55-1]"></match> -->
+		<!-- 				<match :match="matches[56-1]"></match> -->
+		<!-- 			</div> -->
+		<!-- 	</div></details> -->
+		<!-- 	<hr> -->
+		<!-- 	<div><details :open="current.id<49"><summary><h2>Group Round</h2></summary> -->
+		<!-- 		<div id="groups"> -->
+		<!-- 			<div v-for="group in groups" class="group"> -->
+		<!-- 				<h3>Group {{group.letter.toUpperCase()}}</h3> -->
+		<!-- 				<b v-if="group.complete" class="red">FINAL<br></b> -->
+		<!-- 				<table tabindex="0" title="click to show more details"> -->
+		<!-- 					<tr><td :class="{loss:team.eliminated||(group.complete&&i>1)}" v-for="(team,i) in group.teams"><flag :code="team.country"></flag></td></tr> -->
+		<!-- 					<tr data-bold><td v-for="team in group.teams">{{team.country}}</td></tr> -->
+		<!-- 					<tr data-key="PTS"><td v-for="team in group.teams">{{team.group_points}}</td></tr> -->
+		<!-- 					<tr data-key="GD" class="hidden"><td v-for="team in group.teams">{{team.goal_differential}}</td></tr> -->
+		<!-- 					<tr data-key="MP" class="hidden"><td v-for="team in group.teams">{{team.games_played}}</td></tr> -->
+		<!-- 					<tr data-key="W" class="hidden"><td v-for="team in group.teams">{{team.wins}}</td></tr> -->
+		<!-- 					<tr data-key="D" class="hidden"><td v-for="team in group.teams">{{team.draws}}</td></tr> -->
+		<!-- 					<tr data-key="L" class="hidden"><td v-for="team in group.teams">{{team.losses}}</td></tr> -->
+		<!-- 					<tr data-key="GF" class="hidden"><td v-for="team in group.teams">{{team.goals_for}}</td></tr> -->
+		<!-- 					<tr data-key="GA" class="hidden"><td v-for="team in group.teams">{{team.goals_against}}</td></tr> -->
+		<!-- 				</table> -->
+		<!-- 				<br> -->
+		<!-- 				<div -->
+		<!-- 					v-for="match in group.matches.map(id=>matches[id])" -->
+		<!-- 					@mouseover="showdetails(match.id)" -->
+		<!-- 					@click="showdetails(match.id, true)" -->
+		<!-- 					@focus="showdetails(match.id, true)" -->
+		<!-- 					@mouseleave="closedetails()" -->
+		<!-- 					:class="{future:match.status=='future_scheduled',current:match.id==current.id}" -->
+		<!-- 					class="gmatch" -->
+		<!-- 					:id="match.id" -->
+		<!-- 					tabindex="0"> -->
+		<!-- 					<!-1- {{String(match.id).padStart(2, "&nbsp;")}} -1-> -->
+		<!-- 					<flag :code="match.home_team.country"></flag> -->
+		<!-- 					<span :class="{bold:match.home_team.name==match.winner||match.winner=='Draw'}" class="home">{{match.home_team.name}}</span> -->
+		<!-- 					<span class="score" v-if="match.status == 'completed'">{{match.home_team.goals}}-{{match.away_team.goals}}</span> -->
+		<!-- 					<span class="score" v-if="match.status.startsWith('future')">{{time(match.datetime)}}</span> -->
+		<!-- 					<span class="score" v-if="match.status == 'in_progress'">now!</span> -->
+		<!-- 					<span :class="{bold:match.away_team.name==match.winner||match.winner=='Draw'}" class="away">{{match.away_team.name}}</span> -->
+		<!-- 					<flag :code="match.away_team.country"></flag> -->
+		<!-- 				</div> -->
+		<!-- 			</div> -->
+		<!-- 		</div> -->
+		<!-- 	</details></div> -->
+		<!-- 	<div id="matchdetails" v-if="details" :class="{moved:ismoved}"> -->
+		<!-- 		<a href="#" target="_top" @click="details=false" title="close details">&times;</a> -->
+		<!-- 		<div class=""> -->
+		<!-- 			<b>Match #{{details.id}}</b><br><br> -->
+		<!-- 			<span class="home center"> -->
+		<!-- 				<flag size=2 :code="details.home_team.country"></flag><br> -->
+		<!-- 				{{details.home_team.name}}<br> -->
+		<!-- 				<i v-if="details.status != 'future_scheduled'">({{details.home_team.penalties}} penalties)</i> -->
+		<!-- 			</span> -->
+		<!-- 			<span class="score" v-if="details.status == 'completed'">{{details.home_team.goals}}-{{details.away_team.goals}}</span> -->
+		<!-- 			<span class="score" v-if="details.status != 'completed'">vs.</span> -->
+		<!-- 			<span class="away center"> -->
+		<!-- 				<flag size=2 :code="details.away_team.country"></flag><br> -->
+		<!-- 				{{details.away_team.name}}<br> -->
+		<!-- 				<i v-if="details.status != 'future_scheduled'">({{details.away_team.penalties}} penalties)</i> -->
+		<!-- 			</span><br><br> -->
+		<!-- 		</div> -->
+		<!-- 		<span>{{time(details.datetime, true)}}</span><br> -->
+		<!-- 		<span>{{details.venue}}, {{details.location}}</span><span v-if="details.attendance"><br>({{details.attendance}} attendees)</span> -->
+		<!-- 		<hr> -->
+		<!-- 		<h3 class="left">Event List:</h3> -->
+		<!-- 		<div v-if="events(details).length == 0">(none yet)</div> -->
+		<!-- 		<div v-else-if v-for="event in events(details)"> -->
+		<!-- 			<span class="half right"><span v-if="event.class=='left'"> -->
+		<!-- 					{{event.time}} <b>{{event.type_of_event}}</b><br> -->
+		<!-- 					{{event.player}}<del v-if="event.off"><br>{{event.off}}</del> -->
+		<!-- 					<br><br> -->
+		<!-- 			</span></span> -->
+		<!-- 			<span class="half left"><span v-if="event.class=='right'"> -->
+		<!-- 					<b>{{event.type_of_event}}</b> {{event.time}}<br> -->
+		<!-- 					{{event.player}}<del v-if="event.off"><br>{{event.off}}</del> -->
+		<!-- 					<br><br> -->
+		<!-- 			</span></span> -->
+		<!-- 		</div> -->
+		<!-- 		<hr> -->
+		<!-- 		<h3 class="left">Players:</h3> -->
+		<!-- 		<!-1- <table id="lineup"> -1-> -->
+		<!-- 		<!-1- 	<tr> -1-> -->
+		<!-- 		<!-1- 		<td><span v-for="player in details.home_team_lineup.starting_eleven.filter(p=>p.position=='Goalkeeper')">{{player.shirt_number}}</span></td> -1-> -->
+		<!-- 		<!-1- 		<td><span v-for="player in details.home_team_lineup.starting_eleven.filter(p=>p.position=='Goalkeeper')">{{player.shirt_number}}</span></td> -1-> -->
+		<!-- 		<!-1- 		<td><span v-for="player in details.home_team_lineup.starting_eleven.filter(p=>p.position=='Goalkeeper')">{{player.shirt_number}}</span></td> -1-> -->
+		<!-- 		<!-1- 		<td>def</td> -1-> -->
+		<!-- 		<!-1- 		<td>mid</td> -1-> -->
+		<!-- 		<!-1- 		<td>fwd</td> -1-> -->
+		<!-- 		<!-1- 		<td>fwd</td> -1-> -->
+		<!-- 		<!-1- 		<td>mid</td> -1-> -->
+		<!-- 		<!-1- 		<td>def</td> -1-> -->
+		<!-- 		<!-1- 		<td>goal</td> -1-> -->
+		<!-- 		<!-1- 	</tr> -1-> -->
+		<!-- 		<!-1- </table> -1-> -->
+		<!-- 		<h5>(g:goalkeeper, d:defender, m:midfielder, f:forward, u:unknown)</h5> -->
+		<!-- 		<div> -->
+		<!-- 			<span class="half left"> -->
+		<!-- 				<span v-for="player in details.home_team_lineup.starting_eleven"> -->
+		<!-- 					<b>{{String(player.shirt_number).padStart(2,0)}}</b> {{player.name}} <i>{{player.position[0].toLowerCase()}}</i><br> -->
+		<!-- 				</span> -->
+		<!-- 			</span> -->
+		<!-- 			<span class="half right"> -->
+		<!-- 				<span v-for="player in details.away_team_lineup.starting_eleven"> -->
+		<!-- 					<i>{{player.position[0].toLowerCase()}}</i> {{player.name}} <b>{{String(player.shirt_number).padStart(2,0)}}</b><br> -->
+		<!-- 				</span> -->
+		<!-- 			</span> -->
+		<!-- 		</div> -->
+		<!-- 		<h4>substitutes</h4> -->
+		<!-- 		<div> -->
+		<!-- 			<span class="half left"> -->
+		<!-- 				<span v-for="player in details.home_team_lineup.substitutes"> -->
+		<!-- 					<b>{{String(player.shirt_number).padStart(2,0)}}</b> {{player.name}} <i>{{player.position[0].toLowerCase()}}</i><br> -->
+		<!-- 				</span> -->
+		<!-- 			</span> -->
+		<!-- 			<span class="half right"> -->
+		<!-- 				<span v-for="player in details.away_team_lineup.substitutes"> -->
+		<!-- 					 <i>{{player.position[0].toLowerCase()}}</i> {{player.name}} <b>{{String(player.shirt_number).padStart(2,0)}}</b><br> -->
+		<!-- 				</span> -->
+		<!-- 			</span> -->
+		<!-- 		</div> -->
+		<!-- 		<hr> -->
+		<!-- 		<h3 class="left">Officials:</h3> -->
+		<!-- 		<div v-if="details.officials.length==0">(none yet)</div> -->
+		<!-- 		<div v-for="official in details.officials" class="left"> -->
+		<!-- 			<flag :code="official.country"></flag> -->
+		<!-- 			<b>{{official.name}}</b> -->
+		<!-- 			<i>{{official.role}}</i> -->
+		<!-- 		</div> -->
+		<!-- 		<hr> -->
+		<!-- 		<h3 class="left">Weather:</h3> -->
+		<!-- 		{{details.weather.description}}<br> -->
+		<!-- 		{{Math.round((details.weather.temp_celsius*1.8) + 32)}}&deg;F -->
+		<!-- 		{{details.weather.temp_celsius}}&deg;C -->
+		<!-- 		<hr> -->
+		<!-- 		<i>last updated at {{details.last_checked_at}} - <a :href="'https://worldcupjson.net/matches/'+details.id">details</a></i> -->
+		<!-- 	</div> -->
+		<!-- 	<hr> -->
+		<!-- 	<br> -->
+		<!-- 	<div align='center'> -->
+		<!-- 		page views:<img src='https://www.free-website-hit-counter.com/c.php?d=9&id=141496&s=5' border='0' alt='Free Website Hit Counter'> -->
+		<!-- 		<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/cole-wilson/worldcup?label=last%20update"> -->
+		<!-- 	</div> -->
+		<!-- 	<br> -->
+		<!-- </div> -->
+		<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
+		<!-- <script src="./main.js?reload=8"></script> -->
 	</body>
 </html>
