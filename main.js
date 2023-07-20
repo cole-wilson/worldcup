@@ -3,7 +3,11 @@ const locale = navigator.languages && navigator.languages.length ? navigator.lan
 var mouseX;
 var updated = {};
 
-async function getData(path) {return await (await fetch("https://worldcupjson.net"+path)).json()}
+PREFIX = "./data/2022/"
+
+async function getData(path) {
+	return await (await fetch(PREFIX+path)).json()
+}
 
 Vue.component('flag', {
 	props: {code:String, size:{type:String,default:"1"}},
@@ -58,7 +62,6 @@ Vue.component('match', {
 			}
 		},
 		matchCountry: function(country, name=false) {
-			console.log(country)
 			let group = app.groups[country.charCodeAt(1)-65];
 			if (!group) {
 				if (country.startsWith("RU")) {
@@ -197,7 +200,6 @@ window.onload = async () => {
 			let t = groupteams[teamindex]
 			gamecount += t.games_played
 			groupteams[teamindex].eliminated = t.group_points + ((3-t.games_played)*3) < maxpoints
-			// console.log(groupteams[teamindex].eliminated)
 		}
 
 		app.groups.push({
@@ -210,7 +212,6 @@ window.onload = async () => {
 
 	app.current = app.matches.filter(m=>m.status=="in_progress")[0]
 	if (app.current === undefined) {
-		// console.log(app.current)
 		let temp = app.matches.filter(m=>m.status=="completed").sort((a,b)=>{return Date(a.datetime) - Date(b.datetime)})
 		app.current = temp[temp.length-1]
 	}
@@ -241,7 +242,6 @@ async function poll() {
 	}
 }
 function override() {
-	console.log(1)
 	app.matches[38-1].winner_code = "TUN"
 	app.matches[38-1].winner = "Tunisia"
 	app.matches[38-1].away_team.goals = 0

@@ -1,0 +1,1 @@
+{"message":"undefined method `id' for nil:NilClass\n\n    attributes.each{ |key| _set_value key, _format_keys(object.public_send(key)) }\n                                                              ^^^^^^^^^^^^"}
