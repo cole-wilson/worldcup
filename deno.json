@@ -1,0 +1,8 @@
+{
+  "tasks": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "allowScripts": ["npm:core-js@3.49.0", "npm:fsevents@2.3.3"]
+}

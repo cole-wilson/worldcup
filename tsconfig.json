@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "isolatedModules": true,
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2024",
+    "types": ["node"],
+  },
+  "include": [
+    "renderer.ts",
+    "vite.config.js",
+    "nitro.config.ts",
+    "server/**/*.ts",
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "structs/**/*.ts",
+    "types/**/*.d.ts",
+  ],
+}

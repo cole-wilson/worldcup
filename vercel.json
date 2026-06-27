@@ -1,0 +1,5 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "curl -fsSL https://deno.land/install.sh | CI=1 DENO_INSTALL=.deno sh -s v2.8.1 && .deno/bin/deno install --allow-scripts",
+  "buildCommand": ".deno/bin/deno task build"
+}
