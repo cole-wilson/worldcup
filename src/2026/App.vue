@@ -622,6 +622,18 @@ export default {
             // out just for falling out of the top 2 in its own group.
             const THIRD_PLACE_QUALIFIER_COUNT = 8;
 
+            // FIFA's actual tiebreaker order for final standings: points,
+            // then goal differential, then goals scored.
+            const standingsRank = (a, b) =>
+                (b.group_points ?? 0) - (a.group_points ?? 0) ||
+                (b.goal_differential ?? 0) - (a.goal_differential ?? 0) ||
+                (b.goals_for ?? 0) - (a.goals_for ?? 0);
+
+            // once both groups are finished there's no more uncertainty to
+            // be generous about, so a tie at the same points total is
+            // settled by the same tiebreaker rather than left "still alive"
+            const beatsOnTiebreak = (a, b) => standingsRank(a, b) < 0;
+
             this.groups = [];
             let groupInfos = [];
 
@@ -632,14 +644,18 @@ export default {
                 ).toLowerCase();
                 let groupteams = group.teams || [];
                 let groupteamids = groupteams.map((t) => t.country);
-                let pointsDesc = groupteams
-                    .map((t) => t.group_points ?? 0)
-                    .sort((a, b) => b - a);
+                let standings = [...groupteams].sort(standingsRank);
+                let pointsDesc = standings.map((t) => t.group_points ?? 0);
                 let maxpoints = pointsDesc[1] ?? 0;
                 // a team's eventual third-placer can never finish with
                 // fewer points than whoever currently sits third, since
                 // points only ever go up
                 let thirdPlaceFloor = pointsDesc[2] ?? 0;
+                let thirdPlaceTeam = standings[2] ?? {
+                    group_points: 0,
+                    goal_differential: 0,
+                    goals_for: 0,
+                };
                 let groupmatchids = this.matches
                     .filter(
                         (match) =>
@@ -651,18 +667,29 @@ export default {
                     .map((m) => m.id - 1)
                     .sort((a, b) => a - b);
 
-                let gamecount = 0;
+                let gamecount = groupteams.reduce(
+                    (sum, t) => sum + (t.games_played ?? 0),
+                    0,
+                );
+                let complete = gamecount == 12;
                 let teamCeilings = [];
-                for (const teamindex in groupteams) {
-                    let t = groupteams[teamindex];
+                for (const t of groupteams) {
                     const gamesPlayed = t.games_played ?? 0;
                     const groupPoints = t.group_points ?? 0;
-                    gamecount += gamesPlayed;
                     const ceiling = groupPoints + (3 - gamesPlayed) * 3;
                     teamCeilings.push(ceiling);
-                    groupteams[teamindex].outOfTopTwo = ceiling < maxpoints;
-                    groupteams[teamindex].canReachThird =
-                        ceiling >= thirdPlaceFloor;
+
+                    if (complete) {
+                        // no games left in this group: the final order is
+                        // fully decided, and only the team that actually
+                        // finished third is eligible for the wildcard pool
+                        const rank = standings.indexOf(t);
+                        t.outOfTopTwo = rank >= 2;
+                        t.canReachThird = rank === 2;
+                    } else {
+                        t.outOfTopTwo = ceiling < maxpoints;
+                        t.canReachThird = ceiling >= thirdPlaceFloor;
+                    }
                 }
 
                 groupInfos.push({
@@ -670,19 +697,23 @@ export default {
                     groupteams,
                     groupmatchids,
                     gamecount,
+                    complete,
                     thirdPlaceFloor,
+                    thirdPlaceTeam,
                     teamCeilings,
                 });
             }
 
             for (const info of groupInfos) {
-                const otherFloors = groupInfos
-                    .filter((other) => other !== info)
-                    .map((other) => other.thirdPlaceFloor);
+                const otherGroups = groupInfos.filter(
+                    (other) => other !== info,
+                );
                 info.groupteams.forEach((t, index) => {
                     const ceiling = info.teamCeilings[index];
-                    const outOfThirdPlaceRace = otherFloors.filter(
-                        (floor) => floor > ceiling,
+                    const outOfThirdPlaceRace = otherGroups.filter((other) =>
+                        info.complete && other.complete
+                            ? beatsOnTiebreak(other.thirdPlaceTeam, t)
+                            : other.thirdPlaceFloor > ceiling,
                     ).length;
                     const canStillBeBestThird =
                         t.canReachThird &&
@@ -694,15 +725,9 @@ export default {
 
                 this.groups.push({
                     letter: info.groupname,
-                    teams: info.groupteams.sort(
-                        (a, b) =>
-                            (b.group_points ?? 0) - (a.group_points ?? 0) ||
-                            (b.goal_differential ?? 0) -
-                                (a.goal_differential ?? 0) ||
-                            (b.goals_for ?? 0) - (a.goals_for ?? 0),
-                    ),
+                    teams: info.groupteams.sort(standingsRank),
                     matches: info.groupmatchids,
-                    complete: info.gamecount == 12,
+                    complete: info.complete,
                 });
             }
 
