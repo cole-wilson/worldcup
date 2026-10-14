@@ -11,7 +11,7 @@ async function getData(path) {
 
 Vue.component('flag', {
 	props: {code:String, size:{type:String,default:"1"}},
-	template: `	<img onerror="this.remove()" :class="'img'+size" class="flag" :src="'https://api.fifa.com/api/v3/picture/flags-sq-'+size+'/'+code" :alt="code">`
+	template: `	<img onerror="this.remove()" :class="'img'+size" class="flag" :src="'/data/flags/'+size+'/'+code+'.png'" :alt="code">`
 })
 Vue.component('match', {
 	props: ['match'],
